@@ -6127,6 +6127,7 @@ md-tabs .md-tab .md-ripple-container .md-ripple {
   border-radius: 50%;
   display: inline-block;
   margin: 0 0.1em 0.1em 0;
+  
   background-color: #cccccc;
 }
 .c100 *,
