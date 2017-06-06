@@ -1,0 +1,135 @@
+<div id="{{handler}}" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{header}} {{contrat.code}}</h4>
+            </div>
+            <form method="post" class="user">
+              <div class="modal-body">
+                <div ng-cloak>
+                  <md-content>
+                    <md-tabs md-dynamic-height md-border-bottom md-selected="0">
+                      <md-tab label="Informations" md-active="true">
+                        <md-content class="md-padding">
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="code" class="col-sm-4 col-form-label">Code</label>
+                            <div class="col-sm-8">
+                              <input type="text" ng-model="contrat.code" class="form-control" name="code" id="code" placeholder="Code" disabled>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="org" class="col-sm-4 col-form-label">Organisation</label>
+                            <div class="col-sm-8">
+                              <input type="text" data-contrat="contrat" typeahead data-url="'ajaxs.php/orgs/typeahead/'" ng-model="contrat.org" class="form-control" id="org" name="org" placeholder="Client">
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="etat" class="col-sm-4 col-form-label">Etat</label>
+                            <div class="col-sm-8">
+                              <select ng-model="contrat.etat" id="etat" name="etat">
+                                <option value="Actif" selected>Actif</option>
+                                <option value="Soldé">Soldé</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label class="col-sm-4 col-form-label">Date de début</label>
+                            <div class="col-sm-8">
+                              <input datepicker ng-model="contrat.date_debut" id="date_debut" name="date_debut" class="form-control"></input>
+                              <!--<input type="text" ng-model="contrat.date_debut" class="form-control" id="date_debut" name="date_debut" placeholder="Date de début" value="15/05/2017">-->
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="fin" class="col-sm-4 col-form-label">Date de fin</label>
+                            <div class="col-sm-8">
+                              <input datepicker ng-model="contrat.date_fin" id="date_fin" name="date_fin" class="form-control"></input>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="type" class="col-sm-4 col-form-label">Type de contrat</label>
+                            <div class="col-sm-8">
+                              <select type="text" ng-model="contrat.type" class="form-control" id="type" name="type" placeholder="Récupération des types de contrats">
+                                <option value="" id="default">- Récupération des type de contrats -</option>
+                                <option ng-repeat="type in contratTypes">{{type}}</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="comments" class="col-sm-4 col-form-label">Commentaires</label>
+                            <div class="col-sm-8">
+                              <textarea type="text" data-contrat="contrat" ng-model="contrat.comments" class="form-control" id="comments" name="comments" placeholder="Commentaires"></textarea>
+                            </div>
+                          </div>
+
+                      </md-tab>
+                      <md-tab label="Facturation" ng-if="permissions | havePerms:'contrat.edit'">
+                        <md-content class="md-padding">
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="periodicite" class="col-sm-4 col-form-label">Périodicité</label>
+                            <div class="col-sm-8">
+                              <select ng-model="contrat.periodicite" id="periodicite" name="periodicite">
+                                <option>Annuelle</option>
+                                <option>Semestrielle</option>
+                                <option>Trimestrielle</option>
+                                <option>Mensuelle</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="date_prochaine_facture" class="col-sm-4 col-form-label">Prochaine facture</label>
+                            <div class="col-sm-8">
+                              <input datepicker ng-model="contrat.date_prochaine_facture" id="date_prochaine_facture" name="date_prochaine_facture" class="form-control"></input>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="tva" class="col-sm-4 col-form-label">TVA</label>
+                            <div class="col-sm-8">
+                              <select ng-model="contrat.tva" id="tva" name="tva">
+                                <option value="">C320 TVA Coll. à 20%</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="compte_compta" class="col-sm-4 col-form-label">Compte comptable</label>
+                            <div class="col-sm-8">
+                              <input type="text" ng-model="contrat.compte_compta" class="form-control" id="compte_compta" name="compte_compta" placeholder="Compte comptable">
+                            </div>
+                          </div>
+
+                          <div class="form-group col-md-12 col-sm-12">
+                            <label for="prix" class="col-sm-4 col-form-label">Prix</label>
+                            <div class="col-sm-8">
+                              <div class="col-md-8" style="padding:0px"><input type="text" ng-model="contrat.prix" class="form-control" id="prix" name="prix" placeholder="Prix"></div>
+                              <div class="col-md-4" style="padding-right:0px"><input type="text" ng-keyup="multiply($event)" class="form-control" id="multiplicateur" name="multiplicateur" placeholder=""></div>
+                            </div>
+                          </div>
+
+                        </md-content>
+                      </md-tab>
+                    </md-tabs>
+                  </md-content>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" data-ng-click="callremove({contrat:contrat})" class="btn btn-danger" style="float:left" data-dismiss="modal" ng-if="permissions | havePerms:'contrat.edit'"><span class="glyphicon glyphicon-trash"></span></button>
+                <button type="button" ng-if="permissions | havePerms:'contrat.edit'" class="btn btn-default" data-ng-click="callbackbuttonleft()" data-dismiss="modal">Annuler</button>
+                <button type="button" ng-if="permissions | havePerms:'contrat.edit'" class="btn btn-primary" data-dismiss="modal" data-ng-click="callbackbuttonright({contrat:contrat})">{{validButton}}</button>
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,10 @@
+Config file permission:
+Change permission of ost-config.php to remove write access as shown below.
+CLI:
+chmod 0644 include/ost-config.php
+Windows PowerShell:
+icacls include\ost-config.php /reset
+FTP:
+Using WS_FTP this would be right hand clicking on the file, selecting chmod, and then remove write access
+Cpanel:
+Click on the file, select change permission, and then remove write access.
