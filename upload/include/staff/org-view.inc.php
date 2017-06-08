@@ -102,7 +102,7 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
         }
 
         $totalHoraires += $totalHours;
-        $typeContrats[$key] = ['contrat'=>$type,'hours'=>$totalHours];
+        $typeContrats[$key] = ['name'=>$type,'hours'=>$totalHours];
 
       }
 
@@ -122,17 +122,20 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
         }
         $minutes = floor($totalHours / 60);
         //echo "<p>" . $days . "  Jours</p> <p>" . $hours . "  Heures & " . $minutes . " Minutes</p>";
+        echo '<div class="c100i" style="display:none">
+          <p>'.$percentage.'%</p>
+          <p>'.$days.' jours</p>
+          <p>'. $hours . '  Heures & ' . $minutes . ' Minutes.</p>
+        </div>';
         echo '<div class="c100 p'.$percentage.'">
-                    <span>'.$percentage.'%</span>
+                    <span></span>
+                    <p>'.$type['name'].'</p>
                     <div class="slice">
                         <div class="bar"></div>
                         <div class="fill"></div>
                     </div>
                 </div>';
       }
-
-
-
       ?>
       <hr />
       <h5>Temps passé en instal par type</h5>
@@ -150,203 +153,6 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
 <!--MAP-->
 <div style="height:400px;width:800px;margin:auto" id="map"></div>
 
-<br>
-<div class="clear"></div>
-
-
-<!--<div class="tab_content" id="contrat" style="display:none">
-
-<?php
-
-    //$contrat = Contrat::getInstance()->getContrat($org->getId());
-    $contratC = contratCollection::getInstance();
-    $contrat = $contratC->lookUpById($org->getId());
-    print_r($contrat);
-
-    if(empty($contrat) === FALSE){
-
-
-
-    $types = explode(';',$contrat['types']);
-    $debut = DateTime::createFromFormat('Y-m-d',$contrat['depart']);
-    $fin = DateTime::createFromFormat('Y-m-d',$contrat['fin']);
-?>
-
-<label>Date de début : </label>
-<input type="text" class="datepicker" id="1" style="display:inline-block;width:auto" value="" size="12" autocomplete="off">
-<label>Date de fin : </label>
-<input type="text" class="datepicker" id="2" style="display:inline-block;width:auto" value="" size="12" autocomplete="off">
-
-<script>
-    var debut = "<?php echo $debut->format('d/m/Y'); ?>";
-    var fin = "<?php echo $fin->format('d/m/Y'); ?>";
-
-    $('#1.datepicker').datepicker({
-        startView: 1,
-        defaultDate: debut,
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    }).datepicker('setDate',debut);
-
-    $('#2.datepicker').datepicker({
-        startView: 1,
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    }).datepicker('setDate',fin);
-
-</script>
-
-<table class="contrat table table-striped" id="<?php echo $contrat['id'] ?>"
-   data_org_id="<?php echo $org->getId() ?>" width="100%">
-    <thead>
-        <th>Hotline</th>
-        <th>Atelier/Sur site</th>
-        <th>Régie</th>
-        <th>Téléphonie</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td><input type="checkbox" <?php if (in_array('1',$types)) echo 'checked'  ?>></td>
-            <td><input type="checkbox" <?php if (in_array('2',$types)) echo 'checked'  ?>></td>
-            <td><input type="checkbox" <?php if (in_array('3',$types)) echo 'checked'  ?>></td>
-            <td><input type="checkbox" <?php if (in_array('4',$types)) echo 'checked'  ?>></td>
-        </tr>
-    </tbody>
-</table>
-
-<textarea name="commentaire" id="commentaire" cols="50"
-                            placeholder="<?php echo __(
-                            'Start writing your response here. Use canned responses from the drop-down above'
-                            ); ?>"
-                            rows="9" wrap="soft"
-                            class="richtext"><?php echo $contrat['commentaire'] ?></textarea>
-
-<button type="button" class="btn btn-success" id="insertOrUpdate">Valider</button>
-
-<h3>Temps passé : </h3>
-<?php if (in_array('1',$types)) echo '<p><b>Hotline : </b> </p>' ?>
-<?php if (in_array('1',$types)) echo '<p><b>Hotline : </b> </p>' ?>
-<?php if (in_array('1',$types)) echo '<p><b>Hotline : </b> </p>' ?>
-<?php if (in_array('1',$types)) echo '<p><b>Hotline : </b> </p>' ?>
-
-<canvas id="tempsPasse" height="400"></canvas>
-
-<?php
-        } else {
-
-?>
-<label>Date de début : </label>
-<input type="text" class="datepicker" id="1" style="display:inline-block;width:auto" value="" size="12" autocomplete="off">
-<label>Date de fin : </label>
-<input type="text" class="datepicker" id="2" style="display:inline-block;width:auto" value="" size="12" autocomplete="off">
-
-<script>
-    $('#1.datepicker').datepicker({
-        startView: 1,
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    });
-
-    $('#2.datepicker').datepicker({
-        startView: 1,
-        format: 'dd/mm/yyyy',
-        autoclose: true
-    });
-
-</script>
-
-<table class="contrat table table-striped" data_org_id="<?php echo $org->getId() ?>" width="100%">
-    <thead>
-        <th>Hotline</th>
-        <th>Atelier/Sur site</th>
-        <th>Régie</th>
-        <th>Téléphonie</th>
-    </thead>
-    <tbody>
-        <tr>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-            <td><input type="checkbox"></td>
-        </tr>
-    </tbody>
-</table>
-
-<textarea name="commentaire" id="commentaire" cols="50"
-                            placeholder="<?php echo __(
-                            'Start writing your response here. Use canned responses from the drop-down above'
-                            ); ?>"
-                            rows="9" wrap="soft"
-                            class="richtext"></textarea>
-
-<button type="button" class="btn btn-success" id="insertOrUpdate">Valider</button>
-
-<h3>Temps passé : </h3>
-
-<canvas id="tempsPasse" height="400"></canvas>
-
-<?php
-
-    }
-?>
-
-
-<?php
-
-?>
-<script>
-    var data = {
-        labels: ["Hotline","Atelier-Sur site","Régie","Téléphonie"],
-        datasets: [{
-            label: "Temps passé" ,
-            backgroundColor: "#FC9775" ,
-            data: [<?php echo $tempsPasseHotline?>,
-                  <?php echo $tempsPasseAtelierSurSite?>,
-                  <?php echo $tempsPasseRegie?>,
-                  <?php echo $tempsPasseTelephonie?>] ,
-        }]
-    };
-
-    var ctx = $('#tempsPasse');
-    ctx[0].width = $('.container').width()-70;
-    new Chart(ctx, {
-        type: 'bar'
-        , data: data
-        , options: {
-            animation: {
-                duration: 2000
-            }
-            , tooltips: {
-                callbacks: {
-                  label: function(tooltipItem, data) {
-                    var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || 'Other';
-                    var hours = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                    return datasetLabel + ': ' + hours + ' H ';
-                  }
-                }
-              }
-            , responsive: false
-            , maintainAspectRatio: false
-            , scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                        , userCallback: function (label, index, labels) {
-                            // N'afficher que les nombres entiers.
-                            if (Math.floor(label) === label) {
-                                return label;
-                            }
-                        }
-                    , }
-                                         }]
-            , }
-        , }
-    , });
-
-</script>
-
-</div>-->
-
 <div class="tab_content" id="notes" style="display:none">
 <?php
 /*$notes = QuickNote::forOrganization($org);
@@ -357,6 +163,22 @@ include STAFFINC_DIR . 'templates/notes.tmpl.php';*/
 </div>
 
 <script type="text/javascript">
+
+    $(document).ready(function(){
+      $.each($(".c100i"),function(key,value){
+        $(value).css('top', $(value).next().position().top - $(value).next().height() - 10);
+        $(value).css('left', $(value).next().position().left - ($(value).width()/4) - 10);
+      });
+
+      $('.c100').mouseover(function(){
+        $(this).prev().show();
+      });
+
+      $('.c100').mouseleave(function(){
+        $(this).prev().hide();
+      });
+
+    });
 
     $(function() {
         $(document).on('click', 'a.org-action', function(e) {

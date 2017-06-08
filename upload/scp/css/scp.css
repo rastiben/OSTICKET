@@ -6127,9 +6127,32 @@ md-tabs .md-tab .md-ripple-container .md-ripple {
   border-radius: 50%;
   display: inline-block;
   margin: 0 0.1em 0.1em 0;
-  
+
   background-color: #cccccc;
 }
+
+.c100i{
+  width: 250px;
+  text-align: center;
+  background: white;
+  box-shadow: 0px 0px 8px -3px;
+  padding: 15px;
+  position: absolute;
+}
+
+.c100i::after{
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 10px 0 10px;
+  border-color: #ffffff transparent transparent transparent;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  margin-left: -10px;
+}
+
 .c100 *,
 .c100 *:before,
 .c100 *:after {
