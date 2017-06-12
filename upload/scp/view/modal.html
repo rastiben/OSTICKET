@@ -1,0 +1,29 @@
+<div id="{{handler}}" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div></div>
+
+            <!-- ###################### Titre Ou Header ######################-->
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Supprimer le materiel {{toto}}</h4>
+            </div>
+
+            <!-- ###################### Corp Principale ######################-->
+
+            <div class="modal-body">
+                <p class="text-warning">Voulez vous supprimer : {{stock.designation}} Numero : {{stock.numserie}}</p>
+            </div>
+
+            <!-- ###################### Bas de Page composé des 2 boutons ######################-->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sucess" data-backdrop="false" data-dismiss="modal">Conserver</button> <!-- bouton Conserver -->
+                <button type="button" class="btn btn-danger" data-dismiss="modal" data-backdrop="false" data-ng-click="callbackbuttonright(); $event.stopPropagation()">Supprimer</button>  <!-- bouton Supprimer -->
+            </div>
+
+        </div>
+    </div>
+</div>

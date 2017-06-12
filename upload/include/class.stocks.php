@@ -14,7 +14,7 @@ class HistoriqueModel extends VerySimpleModel {
   );
 }
 
-class Stock extends ContratModel
+class Stock extends StockModel
 implements TemplateVariable {
 
     var $_entries;
@@ -32,11 +32,17 @@ implements TemplateVariable {
             $stock = static::lookup(array('id'=>$vars['id']));
 
 
-        $stock->designation = $vars['designation'];
-        $stock->categorie_id = $vars['categorie_id'];
-        $stock->marque = $vars['marque'];
-        $stock->numserie = $vars['numserie'];
-        $stock->dispo = $vars['dispo'];
+        // $stock->designation = $vars['designation'];
+        // $stock->categorie_id = $vars['categorie_id'];
+        // $stock->marque = $vars['marque'];
+        // $stock->numserie = $vars['numserie'];
+        // $stock->dispo = $vars['dispo'];
+
+        $stock->designation = "desi";
+        $stock->categorie_id = 1;
+        $stock->marque = "toto";
+        $stock->numserie = "lglg";
+        $stock->dispo = 1;
 
         try {
             $stock->save(true);

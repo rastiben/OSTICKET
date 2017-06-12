@@ -1,0 +1,123 @@
+
+<div id="titre_general">
+    <div id="buttonRetour">
+      <a href="/osTicket/upload/scp/pret.php" class="btn-Danger btn-lg no-pjax"><span class="glyphicon glyphicon-arrow-left"></span></a>
+    </div>
+    <h1>Information/Historique du Materiel </h1>
+
+    <div class="inset" ng-cloak>
+        <md-switch ng-model="data.cb2" aria-label="Switch 2" ng-true-value="'DISPONIBLE'" ng-false-value="'NON DISPONIBLE'" class="md-primary">
+            <b>Etat : {{ data.cb2 }}</b>
+        </md-switch>
+    </div>
+
+
+
+</div>
+
+<img src=".\image\test.jpg" id="test" width="300" height="200" align="right"/>
+
+        <div id="info">
+
+            <p>
+            <b>Designation :</b> {{stock.designation}}
+            </p>
+            <p>
+            <b>Marque :</b> {{stock.marque}}
+            </p>
+            <p>
+            <b>Categorie :</b> {{stock.categorie_id}}
+            </p>
+            <p>
+            <b>Numero :</b> {{stock.numserie}}
+            </p>
+
+
+<!-- ############################################################################################## -->
+        </div>
+            <div id="buttonInfo">
+            <b>Modifier les infos du Materiel :</b>
+            <button class="btn-warning" ng-click="displayInfo()">                   <!-- Ajout du boutton de modification d'information-->
+                <span class="glyphicon glyphicon-refresh : addInfo"></span>
+            </button>
+            </div>
+<!-- ############################################################################################## -->
+
+    <form action="envoi_info.php" method="post" novalidate class="simple-form" ng-show="addForm">
+        <fieldset>
+            <legend>Info du materiel : </legend>
+            <label>Designation : <input type="text" name="designation" ng-model="stock.designation" /></label>
+            <label>Marque : <input type="text" name="marque" ng-model="stock.marque" /></label>
+            <label>Categorie : <input type="text" name="categorie_id" ng-model="stock.categorie" /></label>           <!-- Valeurs a modifier dans le formulaire Info -->
+            <label>Numero : <input type="text" name="numserie" ng-model="stock.numero" /></label>
+            <input type="button" ng-click="reset()" class="reset" value="Reinitialiser" />
+            <input type="submit" ng-click="update(stock)" class="valid" value="Valider" />
+        </fieldset>
+    </form>
+
+
+<!-- ############################################################################################## -->
+
+    <div id="buttonHisto">
+            <b>Ajouter un Historique :</b>
+            <button class="btn-warning" ng-click="displayHisto()">                  <!-- Ajout du boutton d'ajout d'historique -->
+                <span class="glyphicon glyphicon-plus : addHisto"></span>
+            </button>
+    </div>
+<!-- ############################################################################################## -->
+
+
+    <form  method="post" novalidate class="simple-form" ng-show="addForm2">
+        <fieldset>
+            <legend>Info de l'historique : </legend>
+        <!--    <label>Id historique : <input type="text" ng-model="id_histo" /></label> -->
+            <label>Organisation : <input type="text" name="org" ng-model="org" /></label>
+            <label>Destinataire : <input type="text" name="destinataire" ng-model="destinataire" /></label>
+            <label>Initiale du Technicien : <input type="text" name="visa" ng-model="visa" /></label><!-- Valeurs a modifier dans le formulaire Histo -->
+            <label>Raison du Pret : <input type="text" name="raison" ng-model="raison" /></label>
+
+            <div class="Calendar">
+                <h4>Calendrier</h4>
+
+                <md-datepicker ng-model="ctrl.myDate" type="date" name="date" md-placeholder="Enter date"></md-datepicker>
+
+            </div>
+
+            <input type="reset" ng-click="clear()" class="reset" value="Effacer" />
+            <input type="submit" ng-click="addHisto()" class="valid" value="Valider" />
+        </fieldset>
+    </form>
+
+
+
+<!-- ############################################################################################## -->
+
+<div id="historique" ng-repeat="historique in historiques">
+        <div id="titre">
+            <h3>Historique</h3>
+        </div>
+        <div id="historique1">
+
+            <p>
+            <b>Organisation :</b> {{historique.org}}
+            </p>
+            <p>
+            <b>Destinataire : </b>{{historique.destinataire}}
+            </p>
+            <p>
+            <b>Visa du technicien :</b> {{historique.visa}}
+            </p>
+        </div>
+
+        <div id="historique2">
+            <p>
+            <b>Raison du Pret:</b> {{historique.raison}}
+            </p>
+            <p>
+            <b>Date du pret:</b> {{historique.date}}
+            </p>
+            <p>
+            </p>
+        </div>
+
+</div>

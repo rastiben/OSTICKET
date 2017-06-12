@@ -1,0 +1,109 @@
+h1 {
+    color: #5D4037;
+    margin-top :1px;
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 0px;
+}
+
+
+#titre_general{
+    box-shadow: 0px 3px 20px 0px #656565;
+    background-color: #2ECC71;
+    padding: 5px;
+    border-radius: 3px;
+    margin-bottom: 50px;
+}
+
+
+#test{
+    float: left;
+    width: 400px; /* largeur en pixel de ta photo */
+    height:300px; /* hauteur en pixel de ta photo */
+    margin-left :30px; /* marge en pixel à droite de la photo */
+    margin-right: 60px;
+    margin-bottom: 60px;
+}
+
+/*#info{
+    font-size: large;
+    box-shadow: 0px 3px 20px 0px #656565;
+    border-radius: 3px;
+    background-color: whitesmoke;
+    margin-top: 98px;
+    margin-bottom: 20px;
+}*/
+
+#titre{
+    text-align: center;
+    padding: 2px;
+    background-color: #2ECC71;
+    margin-bottom: 5px;
+    box-shadow: 0px 2px 10px 0px #656565;
+}
+
+#historique{
+    box-shadow: 0px 3px 20px 0px #656565;
+    margin-top: 190px;
+    border-radius: 3px;
+    background-color: whitesmoke;
+}
+
+#historique1{
+    font-size: large;
+    margin-left: 15px;
+    margin-right : 400px;
+    display:inline-block;
+
+}
+
+
+#historique2{
+    font-size: large;
+    display:inline-block;
+
+}
+
+#buttonInfo{
+    float:right;
+    margin-left: 150px;
+    margin-bottom: 15px;
+    margin-right: 20px;
+    font-size: 20px;
+
+
+}
+
+#buttonHisto{
+    float:right;
+    margin-left: 150px;
+    margin-right: 20px;
+    font-size: 20px;
+}
+
+label{
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+
+.valid {
+    margin-right: 90px;
+
+
+}
+
+.reset {
+    margin-right: 10px;
+}
+
+
+
+fieldset {
+    display: inline-block;
+
+}
+
+.inset{
+    margin-left: 450px;
+}

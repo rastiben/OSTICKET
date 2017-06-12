@@ -149,8 +149,9 @@ $dispatcher = patterns('',
         url_get('$','index')
     )),
     url('^/stocks', patterns('ajax.stock.php:StocksAjaxAPI',
+        url_delete('^/(?P<id>\d+)$','remove'),
         url_get('^/(?P<id>\d+)/historiques$','indexHistoriques'),
-        url_get('^/(?P<id>\d+)$','get'),
+        url_get('^/(?P<id>\d+)$','view'),
         url_post('$','add'),
         url_get('$','index')
     )),

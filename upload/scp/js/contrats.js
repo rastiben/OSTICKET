@@ -32,7 +32,7 @@ app.controller('contratCtrl',['$scope','contratFactory','$log','$http',function(
     });
     return prixTotal;
   };
-  
+
   $scope.contrats = contratFactory.query(function(contrats){
     angular.forEach(contrats,function(contrat,key){
       $scope.initContratData(contrat);
@@ -246,10 +246,6 @@ app.directive('modal',['$http','contratFactory', function ($http,contratFactory)
                 if($scope.contrat.prix != undefined)
                   $scope.contrat.prix = (parseFloat($scope.contrat.prix) + ($scope.contrat.prix * ($event.target.value/100))).toFixed(2);
             }
-            /*$scope.updateCode = function(){
-              if($scope.contrat.date_debut != undefined)
-                $scope.contrat.code = moment($scope.contrat.date_debut,'DD/MM/YYYY').format('YYYYMM') + $scope.contrat.org;
-            }*/
         },
         link: function(scope, element, attrs){
           element.bind('keydown', function(evt) {

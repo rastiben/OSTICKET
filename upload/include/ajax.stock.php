@@ -17,7 +17,7 @@ class StocksAjaxAPI extends AjaxController {
     Http::response(200, json_encode($temp));
   }
 
-  function get($id){
+  function view($id){
     $stock = StockModel::objects()->filter(array('id'=>$id));
 
     foreach ($stock as $key => $values) {
@@ -46,6 +46,14 @@ class StocksAjaxAPI extends AjaxController {
     }
 
     Http::response(200, json_encode($temp));
+  }
+
+  function remove($id){
+    if (!($stock = StockModel::lookup($id)))
+        Http::response(404, 'Unknown stock');
+
+    if ($stock->delete())
+        Http::response(204, json_encode($stock->ht));
   }
 
   /*function add(){

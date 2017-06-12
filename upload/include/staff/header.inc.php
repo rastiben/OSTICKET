@@ -177,7 +177,7 @@ if ($lang) {
            </p>
         </div>
 
-       <div class="col-md-12 pageContainer">
+       <div class="pageContainer">
        <!--<div id="header">
             <a href="<?php echo ROOT_PATH ?>scp/index.php" class="no-pjax" id="logo">
                 <span class="valign-helper"></span>

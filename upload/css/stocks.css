@@ -1,0 +1,106 @@
+h1 {
+    color: grey;
+    margin-top :20px;
+    margin-left : 30px;
+    margin-bottom: 30px;
+}
+
+#description {
+    margin-top : 65px;
+    margin-bottom: 35px;
+}
+
+p {
+    margin-top :20px;
+    margin-left : 30px;
+}
+
+logo {
+    margin-top: 50px;
+}
+
+td{
+    color: #424242;
+    margin: auto;
+}
+
+th{
+    color: #5cb85c;
+    margin: auto;
+}
+
+.thead {
+    font-style: bold;
+    align-content: center;
+}
+
+/* Green check. */
+.glyphicon-ok-sign {
+    color: #5cb85c;
+    font-size:22px;
+    margin: auto;
+
+}
+/* Red X. */
+.glyphicon-remove-sign {
+    color: #ff5353;
+    font-size:22px;
+    margin: auto;
+}
+
+/*table {
+    background-color: #B0BEC5;
+    border-radius: 3px;
+    box-shadow: 0px 3px 20px 0px #656565;
+}*/
+
+.pretList{
+  background-color: ghostwhite;
+}
+
+.glyphicon-info-sign {
+    color: white;
+    font-size:13px;
+    margin: auto;
+}
+
+.glyphicon-trash {
+    color: white;
+    font-size:13px;
+    margin: auto;
+}
+
+.reset {
+    position:relative;
+    left:82%;
+    border-radius: 3px;
+    font-size: 17px;
+}
+
+.valid {
+    position:relative;
+    left:68%;
+    border-radius: 3px;
+    font-size: 17px;
+}
+
+.btn-warning {
+    border-radius: 3px;
+    margin-bottom:15px;
+}
+
+fieldset{
+    margin-bottom:15px;
+
+}
+
+label {
+    vertical-align: bottom;
+    display: inline-block;
+}
+
+.radio{
+    width:20px;
+    height:20px;
+    display: inline-block;
+}

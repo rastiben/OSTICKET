@@ -12,7 +12,8 @@ if(!defined('OSTSCPINC') || !$thisstaff || !isset($_REQUEST['id'])) die('Invalid
 //var_dump($org);
 //die();
 
-$org = new Organisation(["411VDOC","150 RUE DES HAUTS DE LA CHAUME","","86280","SAINT BENOIT","",""]);
+if(empty($org))
+  $org = new Organisation(["411VDOC","150 RUE DES HAUTS DE LA CHAUME","","86280","SAINT BENOIT","",""]);
 
 $apiKey = "AIzaSyB4pINEbEV_CczgRAhMhIza1OAEzSJV6JA";
 
@@ -55,92 +56,35 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
       </div>
     </div>
     <div class="col-md-12">
-      <?php
-      //Recuperation des contrats
-
-      $query = 'SELECT rapport.id,rapport.contrat,rapport.instal FROM ost_rapport rapport '
-            . 'INNER JOIN ost_ticket ticket ON (rapport.id_ticket = ticket.ticket_id) '
-            . 'INNER JOIN ost_user user ON (ticket.user_id = user.id AND user.org_name = \''.$org->getName().'\')';
-
-      $result = db_query($query);
-      $contrats = [];
-      $typeContrats = [];
-      while ($row = db_fetch_array($result)) {
-        if(!empty($row['contrat']) && $row['contrat'] != '0' && !in_array($row['contrat'],$typeContrats)){
-          array_push($typeContrats,$row['contrat']);
-        }
-        array_push($contrats,(object)array('id'=>$row['id'],'contrat'=>$row['contrat'],'instal'=>$row['instal']));
-      }
-      ?>
       <h5>Temps passé par type de contrat</h5>
-      <?php
-      $horaires = [];
-      $totalHoraires = 0;
-
-      foreach ($typeContrats as $key => $type) {
-
-        $filteredContrats = array_filter($contrats, function($elem) use($type){
-            return $elem->contrat == $type;
-        });
-
-        foreach ($filteredContrats as $key => $contrat) {
-
-            $query = 'SELECT horaire.arrive_inter,horaire.depart_inter FROM ost_rapport_horaires horaire WHERE horaire.id_rapport = \''.$contrat->id.'\'';
-            $result = db_query($query);
-            while ($row = db_fetch_array($result)) {
-              array_push($horaires,(object)array('arrive_inter'=>$row['arrive_inter'],'depart_inter'=>$row['depart_inter']));
-            }
-        }
-        //Calcule du temps passé
-        $totalHours = 0;
-
-        foreach ($horaires as $key => $horaire) {
-          $arrive_inter = DateTime::createFromFormat('Y-m-d H:i:s',$horaire->arrive_inter);
-          $depart_inter = DateTime::createFromFormat('Y-m-d H:i:s',$horaire->depart_inter);
-          //Hour difference
-          $totalHours += $depart_inter->getTimestamp() - $arrive_inter->getTimestamp();
-        }
-
-        $totalHoraires += $totalHours;
-        $typeContrats[$key] = ['name'=>$type,'hours'=>$totalHours];
-
-      }
-
-      foreach ($typeContrats as $key => $type) {
-        //echo $type['hours'];
-        $percentage = round(($type['hours']*100)/$totalHoraires);
-        //echo $percentage;
-
-        $totalHours = $type['hours'];
-        $days = floor($totalHours / 27900);
-        if($days >= 1){
-            $totalHours = $totalHours - (days * 27900);
-        }
-        $hours = floor($totalHours / 3600);
-        if($hours >= 1){
-            $totalHours = $totalHours - ($hours * 3600);
-        }
-        $minutes = floor($totalHours / 60);
-        //echo "<p>" . $days . "  Jours</p> <p>" . $hours . "  Heures & " . $minutes . " Minutes</p>";
-        echo '<div class="c100i" style="display:none">
-          <p>'.$percentage.'%</p>
-          <p>'.$days.' jours</p>
-          <p>'. $hours . '  Heures & ' . $minutes . ' Minutes.</p>
-        </div>';
-        echo '<div class="c100 p'.$percentage.'">
-                    <span></span>
-                    <p>'.$type['name'].'</p>
-                    <div class="slice">
-                        <div class="bar"></div>
-                        <div class="fill"></div>
-                    </div>
-                </div>';
-      }
-      ?>
+      <div class="form" style="text-align:center">
+        <label for="dateDebutC">Date de debut : </label>
+        <input id="dateDebutC" name="dateDebutC" />
+        <label for="dateFinC">Date de fin : </label>
+        <input id="dateFinC" name="dateFinC" />
+        <button class="reloadContrats" data-type="contrat" class="btn btn-success">Modifier</button>
+      </div>
+      <canvas id="tempsContrat" style="max-width:350px;margin:0 auto;"></canvas>
       <hr />
       <h5>Temps passé en instal par type</h5>
+      <div class="form" style="text-align:center">
+        <label for="dateDebutI">Date de debut : </label>
+        <input id="dateDebutI" name="dateDebutI" />
+        <label for="dateFinI">Date de fin : </label>
+        <input id="dateFinI" name="dateFinI" />
+        <button class="reloadContrats" data-type="instal" class="btn btn-success">Modifier</button>
+      </div>
+      <canvas id="tempsInstal" style="max-width:350px;margin:0 auto;"></canvas>
       <hr />
       <h5>Temps passé en formation</h5>
+      <div class="form" style="text-align:center">
+        <label for="dateDebutF">Date de debut : </label>
+        <input id="dateDebutF" name="dateDebutF" />
+        <label for="dateFinF">Date de fin : </label>
+        <input id="dateFinF" name="dateFinF" />
+        <button class="reloadContrats" data-type="formation" class="btn btn-success">Modifier</button>
+      </div>
+      <canvas id="tempsFormation" style="max-width:350px;margin:0 auto;"></canvas>
       <hr />
     </div>
   </div>
@@ -165,19 +109,12 @@ include STAFFINC_DIR . 'templates/notes.tmpl.php';*/
 <script type="text/javascript">
 
     $(document).ready(function(){
-      $.each($(".c100i"),function(key,value){
-        $(value).css('top', $(value).next().position().top - $(value).next().height() - 10);
-        $(value).css('left', $(value).next().position().left - ($(value).width()/4) - 10);
+      var datepickers = ["#dateDebutC","#dateFinC","#dateDebutI","#dateFinI","#dateDebutF","#dateFinF"];
+      $.each(datepickers,function(key,value){
+        $(value).datepicker({
+          dateFormat:"dd/mm/yy"
+        });
       });
-
-      $('.c100').mouseover(function(){
-        $(this).prev().show();
-      });
-
-      $('.c100').mouseleave(function(){
-        $(this).prev().hide();
-      });
-
     });
 
     $(function() {
@@ -218,4 +155,63 @@ include STAFFINC_DIR . 'templates/notes.tmpl.php';*/
             });
         }
     });
+
+  var getChartData = function(datas){
+      datas = $.parseJSON(datas);
+      return data = {
+          labels: datas.labels,
+          datasets: [
+              {
+                  data: datas.data,
+                  backgroundColor: datas.backgrounds
+              }]
+      };
+    }
+
+    var options = {
+      tooltips: {
+        callbacks: {
+          label: function(tooltipItem, chartData) {
+
+            var totalHours = chartData.datasets[0].data[tooltipItem.index];
+            var days = Math.floor(totalHours / 27900);
+            if(days >= 1){
+                totalHours = totalHours - (days * 27900);
+            }
+            var hours = Math.floor(totalHours / 3600);
+            if(hours >= 1){
+                totalHours = totalHours - (hours * 3600);
+            }
+            var minutes = Math.floor(totalHours / 60);
+
+            return chartData.labels[tooltipItem.index] +': ' + days + ' Jours ' + hours + ' Heures & ' + minutes + " Minutes";
+          }
+        }
+      }
+    }
+    var myChart = {"contrat":undefined,"instal":undefined,"formation":undefined};
+
+    $('.reloadContrats').click(function(){
+      var type = $(this).attr('data-type');
+      var canvas = $(this).parent().next().attr('id');
+      var char = type[0].toUpperCase();
+      $.ajax({
+        method: "GET",
+        url:"/osTicket/upload/scp/orgs.php?stats="+type,
+        data: {
+          datedebut:$('#dateDebut'+char).val(),
+          datefin:$('#dateFin'+char).val(),
+        },
+        success : function(response){
+          if(myChart[type] != undefined)
+            myChart[type].destroy();
+          myChart[type] = new Chart($("#"+canvas), {
+            type: 'pie',
+            data: getChartData(response),
+            options : options
+          });
+        }
+      });
+    });
+
 </script>
