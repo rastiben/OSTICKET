@@ -1,3 +1,7 @@
+body{
+  top: 0px !important;
+}
+
 h1 {
     color: #5D4037;
     margin-top :1px;
@@ -6,6 +10,14 @@ h1 {
     margin-bottom: 0px;
 }
 
+.md-datepicker-button.md-icon-button.md-button.md-ink-ripple{
+  margin: -10px !important;
+  padding: 0px !important;
+}
+
+.btn.btn-success.pull-right{
+  margin-right: 15px;
+}
 
 #titre_general{
     box-shadow: 0px 3px 20px 0px #656565;
@@ -20,9 +32,8 @@ h1 {
     float: left;
     width: 400px; /* largeur en pixel de ta photo */
     height:300px; /* hauteur en pixel de ta photo */
-    margin-left :30px; /* marge en pixel à droite de la photo */
     margin-right: 60px;
-    margin-bottom: 60px;
+    margin-bottom: 30px;
 }
 
 /*#info{
@@ -35,50 +46,63 @@ h1 {
 }*/
 
 #titre{
-    text-align: center;
-    padding: 2px;
-    background-color: #2ECC71;
-    margin-bottom: 5px;
-    box-shadow: 0px 2px 10px 0px #656565;
+  text-align: center;
+  padding: 2px;
+  background-color: gray;
+  box-shadow: 0px 2px 3px -1px #656565;
+  display: table-caption;
+}
+
+#titre.dispo{
+  background-color: #2ECC71;
 }
 
 #historique{
     box-shadow: 0px 3px 20px 0px #656565;
-    margin-top: 190px;
+    margin-top: 30px;
     border-radius: 3px;
-    background-color: whitesmoke;
+    background-color: white;
+    display: table;
+    width: 100%;
+}
+
+#historique:last-child{
+  margin-bottom: 30px;
 }
 
 #historique1{
-    font-size: large;
-    margin-left: 15px;
-    margin-right : 400px;
-    display:inline-block;
-
+  font-size: 14px;
+  margin-left: 15px;
+  width: 50%;
+  display: table-cell;
+  vertical-align: top;
 }
 
 
 #historique2{
-    font-size: large;
-    display:inline-block;
-
+  font-size: 14px;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: top;
 }
 
 #buttonInfo{
     float:right;
     margin-left: 150px;
     margin-bottom: 15px;
-    margin-right: 20px;
     font-size: 20px;
+}
 
+.infos{
+  padding:0px;
+}
 
+.historiques{
+  padding: 0px;
 }
 
 #buttonHisto{
-    float:right;
-    margin-left: 150px;
-    margin-right: 20px;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 label{
@@ -97,13 +121,16 @@ label{
     margin-right: 10px;
 }
 
-
+.btn.btn-primary{
+  margin-bottom: 15px;
+}
 
 fieldset {
     display: inline-block;
-
+    width: 100%;
 }
 
 .inset{
-    margin-left: 450px;
+  width: 145px;
+  margin: 0 auto
 }

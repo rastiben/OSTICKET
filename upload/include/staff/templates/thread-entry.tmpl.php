@@ -122,6 +122,20 @@ else
     <div class="thread-body no-pjax">
         <div><?php echo $entry->getBody()->toHtml(); ?></div>
         <div class="clear"></div>
+
+<?php
+  $historique = HistoriqueModel::objects()->filter(array('thread_entry_id'=>$entry->id));
+
+  if($historique->count() > 0) {
+
+    $stock = StockModel::objects()->filter(array('id'=>$historique[0]->stock_id));
+  ?>
+    <hr />
+    <div>
+      <?= $stock[0]->designation . " - " .  $stock[0]->numserie; ?>
+    </div>
+
+<?php } ?>
 <?php
     // The strangeness here is because .has_attachments is an annotation from
     // Thread::getEntries(); however, this template may be used in other

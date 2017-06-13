@@ -23,6 +23,7 @@ require_once(INCLUDE_DIR.'class.json.php');
 require_once(INCLUDE_DIR.'class.dynamic_forms.php');
 require_once(INCLUDE_DIR.'class.export.php');       // For paper sizes
 require_once(INCLUDE_DIR.'class.org.php');
+require_once(INCLUDE_DIR.'class.stocks.php');
 require_once(SCP_DIR.'Request/Tickets.php');
 
 $page='';
@@ -86,6 +87,8 @@ if($_POST && !$errors):
         $role = $thisstaff->getRole($ticket->getDeptId());
         switch(strtolower($_POST['a'])):
         case 'reply':
+            /*var_dump($_POST['pret']);
+            die();*/
             if (!$role || !$role->hasPerm(TicketModel::PERM_REPLY)) {
                 $errors['err'] = __('Action denied. Contact admin for access');
             }
@@ -124,6 +127,32 @@ if($_POST && !$errors):
                                 $ticket->getId(), $ticket->getNumber()))
                         );
 
+                if(isset($_POST['pret']) && $_POST['pret'] != "Vueillez choisir un pret"){
+                  $numserie = explode(' - ',$_POST['pret'])[1];
+                  $stock = StockModel::objects()->filter(array('numserie'=>$numserie))[0];
+
+                  if($stock->dispo != 0 && $stock->thread_entry_id == null)
+                  {
+                    $stock->setThreadEntry($response->ht['id']);
+                    $stock->setDispo(0);
+
+                    preg_match_all('/(?<=\s|^)[a-z]/i', $ticket->getStaff()->getName(), $matches);
+
+                    $historique = Historique::fromVars(array(
+                      "stock_id"=>$stock->ht['id'],
+                      "org"=>$ticket->getUser()->getOrgName(),
+                      "destinataire"=> $ticket->getUser()->getFirstName() . " " . $ticket->getUser()->getName(),
+                      "visa"=> strtoupper(implode('', $matches[0])),
+                      "raison"=>$vars['response'],
+                      "date"=>date("Y-m-d"),
+                      "thread_entry_id"=>$response->ht['id']
+                    ));
+                  } else {
+                    $errors['err'] = __('Ce matériel est déja en prêt.');
+                    $msg = null;
+                  }
+                }
+
                 // Clear attachment list
                 $response_form->setSource(array());
                 $response_form->getField('attachments')->reset();
@@ -139,6 +168,9 @@ if($_POST && !$errors):
                 // Go back to the ticket listing page on reply
                 $ticket = null;
                 $redirect = 'tickets.php?id=' . $_POST['id'];
+
+                //var_dump($errors['err']);
+                //die();
 
             } elseif(!$errors['err']) {
                 $errors['err']=sprintf('%s %s',

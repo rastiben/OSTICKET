@@ -1,9 +1,11 @@
+moment.locale('fr');
+
 //var Appli = angular.module('Appli',['ngRoute','ngMaterial','ngResource'])
 angular.module('myApp').requires.push('ngRoute');
 angular.module('myApp').requires.push('ngMaterial');
 angular.module('myApp').requires.push('ngResource');
 
-app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Configuration des adressses)
+app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { // ROUTE PROVIDER (Configuration des adressses)
     $routeProvider
     .when('/osTicket/upload/scp/pret.php', {
         templateUrl: '/osTicket/upload/scp/view/stocks.html', // ADRESSE LISTE
@@ -21,6 +23,9 @@ app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Conf
         template : "<div></div>"
     }); // ADDRESSE PRIMAIRE
 
+    $mdDateLocaleProvider.formatDate = function(date) {
+      return moment(date).format('DD/MM/YYYY');
+    };
 
     $locationProvider.html5Mode(true); // CE CODE PERMET DE MODIFIER LES ADDREESE EN HTML POUR NE PAS AVOIR /localhost/#! MAIS /localhost/
 })
@@ -47,7 +52,7 @@ app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Conf
 
 
 //CONTROLLEUR QUI PERMET DANS TRIER DE A a Z (PARTIE STOCKS)
-.controller('stocksController',['$scope','stocksFactory', '$log', 'orderByFilter', function($scope, stocksFactory, $log, orderBy ){
+.controller('stocksController',['$scope','stocksFactory', '$log','$location', 'orderByFilter', function($scope, stocksFactory, $log, $location, orderBy ){
     $scope.stocks = stocksFactory.query();
 
     $scope.currentStock = undefined;
@@ -94,6 +99,10 @@ app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Conf
       $scope.currentStock = stock;
     }
 
+    $scope.goTo = function(id){
+      $location.path("/osTicket/upload/scp/pret.php/"+id);
+    }
+
 }])
 
 
@@ -127,9 +136,22 @@ app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Conf
 //CONTROLEUR QUI PERMET D'ALLER DANS L'ID (PARTIE STOCK)
 .controller('stockController',['$scope','stocksFactory', '$log', 'orderByFilter', '$routeParams', '$filter', function($scope, stocksFactory, $log,  orderBy, $routeParams, $filter){
     var id = $routeParams.id;
-    $scope.stock = stocksFactory.get({'id':id}); // FILTRAGE DU MODULE STOCKSFACTORY (soit 1 ; 2 ; 3) POUR FAIRE CORRESPONDRE
+    $scope.stock = stocksFactory.get({'id':id},function(){
+      $scope.message = $scope.stock.dispo === 1 ? 'DISPONIBLE' : 'NON DISPONIBLE';
+    }); // FILTRAGE DU MODULE STOCKSFACTORY (soit 1 ; 2 ; 3) POUR FAIRE CORRESPONDRE
 
     $scope.historiques = stocksFactory.historiques({'id':id});  // L'HISTORIQUE AVEC LE MATERIEL (stock/1 = info objet 1)
+
+    $scope.data = {
+      cb1:true
+    };
+
+    $scope.setMessage = function(){
+      $scope.message = 'DISPONIBLE';
+      $scope.stock.dispo = 1;
+      $scope.stock.thread_entry_id = null;
+      $scope.stock.$save();
+    }
 
 
     this.myDate = new Date(); // Code du calendrier (ici initialisation d'une date)
@@ -179,19 +201,29 @@ app.config(function($routeProvider, $locationProvider) { // ROUTE PROVIDER (Conf
         $scope.addForm2=!$scope.addForm2;
     }
 
+    $scope.date = moment();
+
     $scope.addHisto = function() {
         var historique = new stocksFactory();
         historique.org = $scope.org;
+        historique.stock_id = $scope.stock.id;
         historique.destinataire = $scope.destinataire;
         historique.visa = $scope.visa;
         historique.raison = $scope.raison;
         historique.date = $scope.date;
-        stocksFactory.addHistorique({id:$scope.stock.id},historique);
+        stocksFactory.addHistorique({id:$scope.stock.id},historique,function(historique){
+          $scope.addForm2 = false;
+          $scope.historiques.unshift(historique);
+
+          $scope.message = 'NON DISPONIBLE';
+          $scope.stock.dispo = 0;
+          $scope.stock.thread_entry_id = null;
+          $scope.stock.$save();
+        });
     }
 
     $scope.data = {
     cb1: true,
-
     };
 
 

@@ -19,6 +19,7 @@ if(!defined('INCLUDE_DIR')) die('403');
 include_once(INCLUDE_DIR.'class.ticket.php');
 require_once(INCLUDE_DIR.'class.ajax.php');
 require_once(INCLUDE_DIR.'class.note.php');
+require_once(INCLUDE_DIR.'class.stocks.php');
 include_once INCLUDE_DIR . 'class.thread_actions.php';
 
 class TicketsAjaxAPI extends AjaxController {
@@ -905,6 +906,18 @@ class TicketsAjaxAPI extends AjaxController {
         $state = strtolower($status->getState());
 
         if (!$errors && $ticket->setStatus($status, $_REQUEST['comments'], $errors)) {
+
+            /*CHANGER L'ETAT D'UN PRET*/
+            if($status->getState() == 'closed'){
+              $entries = $ticket->getThreadEntries(array('R'));
+              foreach ($entries as $key => $entry) {
+                $stocks = StockModel::objects()->filter(array('thread_entry_id'=>$entry->id));
+                if($stocks->count() > 0){
+                  $stocks[0]->setThreadEntry(null);
+                  $stocks[0]->setDispo(1);
+                }
+              }
+            }
 
             if ($state == 'deleted') {
                 $msg = sprintf('%s %s',

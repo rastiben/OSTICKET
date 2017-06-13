@@ -34,9 +34,19 @@ class StocksAjaxAPI extends AjaxController {
         Http::response(201, json_encode($stock->ht));
   }
 
+  function addHistorique(){
+    $vars = (array)json_decode(file_get_contents("php://input"));
+
+    if (($historique = Historique::fromVars($vars)))
+        Http::response(201, json_encode($historique->ht));
+  }
+
 
   function indexHistoriques($id){
-    $historiques = HistoriqueModel::objects()->filter(array("stock_id"=>$id));
+    $historiques = HistoriqueModel::objects()
+    ->filter(array("stock_id"=>$id))
+    ->order_by("date",QuerySet::DESC);
+
     $temp = [];
 
     foreach ($historiques as $key => $historique) {

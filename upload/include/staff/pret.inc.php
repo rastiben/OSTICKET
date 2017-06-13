@@ -13,6 +13,7 @@
 
 <!-- Installation des Routes d'Angular (pour les URL), de Bootstrap (Pour les Boutons, affichage etc) et App.js (Fichier essentiel a la creation d'une application) -->
 
+<script src="osTicket/upload/scp/js/moment.js"></script>
 <script src="osTicket/upload/js/angular-route.min.js" type="application/javascript"></script>
 <script src="osTicket/upload/js/bootstrap.js" type="application/javascript"></script>
 <script src="osTicket/upload/js/pret.js" type="application/javascript"></script>
@@ -25,6 +26,6 @@
   <link href="osTicket/upload/css/stocks.css" type="text/css" rel="stylesheet"/>
   <link href="osTicket/upload/css/stock.css" type="text/css" rel="stylesheet"/>
 
-  <div ng-view=""></div>
+  <div class="col-md-12" ng-view=""></div>
 
 </div>

@@ -12,6 +12,7 @@ require_once(SCP_DIR . 'Request/Tickets.php');
 require_once(SCP_DIR . 'Request/Rapport.php');
 require_once(SCP_DIR . 'Request/Atelier.php');
 require_once(INCLUDE_DIR . 'class.contrats.php');
+require_once(INCLUDE_DIR . 'class.stocks.php');
 
 //Get the goodies.
 $dept  = $ticket->getDept();  //Dept
@@ -753,7 +754,7 @@ if($ticket->isOverdue())
 
 ?>
 <div class="clear"></div>
-<!--<?php
+<?php
 if ($errors['err'] && isset($_POST['a'])) {
     // Reflect errors back to the tab.
     $errors[$_POST['a']] = $errors['err'];
@@ -763,7 +764,7 @@ if ($errors['err'] && isset($_POST['a'])) {
 } elseif($warn) { ?>
     <div id="msg_warning"><?php echo $warn; ?></div>
 <?php
-} ?>-->
+} ?>
 
 <div class="sticky bar stop actions" id="response_options">
     <ul class="tabs" id="response-tabs">
@@ -965,6 +966,18 @@ if ($errors['err'] && isset($_POST['a'])) {
             </tr>
          </tbody>
         </table>
+        <div>
+          <?php
+
+            $stocks = StockModel::objects()->filter(array('thread_entry_id'=>null,'dispo'=>1));
+          ?>
+          <label>Mettre un matériel en prêt : <select name="pret">
+            <option selected="selected">Vueillez choisir un pret</option>
+            <?php foreach($stocks as $stock){ ?>
+            <option><?= $stock->designation . " - " . $stock->numserie; ?></option>
+            <?php } ?>
+          </select></label>
+        </div>
         <p  style="text-align:center;">
             <input class="save pending" type="submit" value="<?php echo __('Post Reply');?>">
             <input class="" type="reset" value="<?php echo __('Reset');?>">
