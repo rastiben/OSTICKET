@@ -27,7 +27,14 @@ if ($_REQUEST['org_id'])
 
       $org = new Organisation(["411VDOC","150 RUE DES HAUTS DE LA CHAUME","","86280","SAINT BENOIT","",""]);
 
-      $query = 'SELECT rapport.id,rapport.contrat,rapport.instal,helpTopic.couleur FROM ost_rapport rapport '
+      $typeInter = [];
+      $query = 'SELECT helpTopic.topic FROM ost_help_topic helpTopic';
+      $result = db_query($query);
+      while ($row = db_fetch_array($result)) {
+        array_push($typeInter,$row['topic']);
+      }
+
+      $query = 'SELECT rapport.id,rapport.contrat,rapport.instal,helpTopic.couleur,helpTopic.topic FROM ost_rapport rapport '
             . 'INNER JOIN ost_ticket ticket ON (rapport.id_ticket = ticket.ticket_id) '
             . 'INNER JOIN ost_help_topic helpTopic ON (rapport.topic_id = helpTopic.topic_id)'
             . 'INNER JOIN ost_user user ON (ticket.user_id = user.id AND user.org_name = \''.$org->getName().'\')'
@@ -51,27 +58,36 @@ if ($_REQUEST['org_id'])
       $result = db_query($query);
       $contrats = [];
       $typeContrats = [];
+      $dataSets = [];
+
       while ($row = db_fetch_array($result)) {
-        if(!empty($row[$_REQUEST['stats']]) && $row[$_REQUEST['stats']] != '0' && !in_array($row[$_REQUEST['stats']],$typeContrats)){
-          array_push($typeContrats,array('name'=>$row[$_REQUEST['stats']],'couleur'=>$row['couleur']));
+
+        if(!empty($row[$_REQUEST['stats']])
+        && $row[$_REQUEST['stats']] != '0'
+        && !in_array(array('name'=>$row[$_REQUEST['stats']],'couleur'=>$row['couleur'],'topic'=>$row['topic']),$typeContrats)){
+          array_push($typeContrats,array('name'=>$row[$_REQUEST['stats']],'couleur'=>$row['couleur'],'topic'=>$row['topic']));
         } else if($formation && empty($typeContrats)){
           array_push($typeContrats,array('name'=>'Formation','couleur'=>$row['couleur']));
         }
-        array_push($contrats,array('id'=>$row['id'],'contrat'=>$row['contrat'],'instal'=>$row['instal']));
+        array_push($contrats,array('id'=>$row['id'],'contrat'=>$row['contrat'],'instal'=>$row['instal'],'topic'=>$row['topic']));
+
       }
 
       $horaires = [];
       $totalHoraires = 0;
 
-        foreach ($typeContrats as $key => $type) {
+      foreach ($typeContrats as $key => $type) {
+
+          $horaires = [];
 
           if(!$formation){
             $filteredContrats = array_filter($contrats, function($elem) use($type){
-                return $elem[$_REQUEST['stats']] == $type['name'];
+                return $elem[$_REQUEST['stats']] == $type['name'] && $elem['topic'] == $type['topic'];
             });
           }
 
           $toFilter = $formation ? $contrats : $filteredContrats;
+
 
           foreach ($toFilter as $contrat) {
               $query = 'SELECT horaire.arrive_inter,horaire.depart_inter FROM ost_rapport_horaires horaire
@@ -83,33 +99,42 @@ if ($_REQUEST['org_id'])
           }
 
           //Calcule du temps passé
-          $totalHours = 0;
+
 
           foreach ($horaires as $horaire) {
             $arrive_inter = DateTime::createFromFormat('Y-m-d H:i:s',$horaire->arrive_inter);
             $depart_inter = DateTime::createFromFormat('Y-m-d H:i:s',$horaire->depart_inter);
             //Hour difference
+            //var_dump($depart_inter->format('H:i:s') . ' - ' . $arrive_inter->format('H:i:s') . ' = ' . ($depart_inter->getTimestamp() - $arrive_inter->getTimestamp()));
             $totalHours += $depart_inter->getTimestamp() - $arrive_inter->getTimestamp();
           }
 
+
+          $sets = count(array_filter($dataSets, function($elem) use($type){
+              return $elem['label'] == $type['name'];
+          }));
+
+          if($sets == 0){
+            $dataSets[$type['name']]['label'] = $type['name'];
+            $dataSets[$type['name']]['data'] = [];
+            for ($i=0; $i < count($typeInter); $i++) {
+              array_push($dataSets[$type['name']]['data'],0);
+            }
+          }
+
+          //var_dump($totalHours);
+          //array_push($dataSets[$type['name']]['data'],$totalHours);
+          $dataSets[$type['name']]['data'][array_search($type['topic'],$typeInter)] = $totalHours;
           $totalHoraires += $totalHours;
-          //var_dump($typeContrats);
-          //die();
-          $typeContrats[$key]['hours'] = $totalHours;
-        }
 
-        foreach ($typeContrats as $key => $type) {
-          //echo $type['hours'];
-          $percentage = round(($type['hours']*100)/$totalHoraires);
 
-          $typeContrats[$key]['name'] .= ' ('.$percentage.'%)';
-        }
+      }
 
       $result = [
-        'labels'=>array_map(create_function('$o', 'return $o["name"];'), $typeContrats),
-        'data'=>array_map(create_function('$o', 'return $o["hours"];'), $typeContrats),
-        'backgrounds'=>array_map(create_function('$o', 'return $o["couleur"];'), $typeContrats)
+        'labels'=>$typeInter,
+        'data'=>array_values($dataSets)
       ];
+
       echo json_encode($result);
       die();
 

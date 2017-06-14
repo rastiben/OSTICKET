@@ -120,6 +120,11 @@ if($_POST && !$errors):
                     $errors['err']=__('Email is in banlist. Must be removed to reply.');
             }
 
+            $numserie = explode(' - ',$_POST['pret'])[1];
+            $stock = StockModel::objects()->filter(array('numserie'=>$numserie))[0];
+            if(!($stock->dispo != 0 && $stock->thread_entry_id == null))
+              $errors['err'] = __('Ce matériel est déja en prêt.');
+
             if(!$errors && ($response=$ticket->postReply($vars, $errors, $_POST['emailreply']))) {
                 $msg = sprintf(__('%s: Reply posted successfully'),
                         sprintf(__('Ticket #%s'),
@@ -128,11 +133,7 @@ if($_POST && !$errors):
                         );
 
                 if(isset($_POST['pret']) && $_POST['pret'] != "Vueillez choisir un pret"){
-                  $numserie = explode(' - ',$_POST['pret'])[1];
-                  $stock = StockModel::objects()->filter(array('numserie'=>$numserie))[0];
 
-                  if($stock->dispo != 0 && $stock->thread_entry_id == null)
-                  {
                     $stock->setThreadEntry($response->ht['id']);
                     $stock->setDispo(0);
 
@@ -147,10 +148,7 @@ if($_POST && !$errors):
                       "date"=>date("Y-m-d"),
                       "thread_entry_id"=>$response->ht['id']
                     ));
-                  } else {
-                    $errors['err'] = __('Ce matériel est déja en prêt.');
-                    $msg = null;
-                  }
+
                 }
 
                 // Clear attachment list

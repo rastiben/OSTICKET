@@ -64,7 +64,7 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
         <input id="dateFinC" name="dateFinC" />
         <button class="reloadContrats" data-type="contrat" class="btn btn-success">Modifier</button>
       </div>
-      <canvas id="tempsContrat" style="max-width:350px;margin:0 auto;"></canvas>
+      <canvas id="tempsContrat" style="max-width:100%;max-height:300px;margin:0 auto;"></canvas>
       <hr />
       <h5>Temps passé en instal par type</h5>
       <div class="form" style="text-align:center">
@@ -74,7 +74,7 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
         <input id="dateFinI" name="dateFinI" />
         <button class="reloadContrats" data-type="instal" class="btn btn-success">Modifier</button>
       </div>
-      <canvas id="tempsInstal" style="max-width:350px;margin:0 auto;"></canvas>
+      <canvas id="tempsInstal" style="max-width:100%;max-height:300px;margin:0 auto;"></canvas>
       <hr />
       <h5>Temps passé en formation</h5>
       <div class="form" style="text-align:center">
@@ -84,7 +84,7 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
         <input id="dateFinF" name="dateFinF" />
         <button class="reloadContrats" data-type="formation" class="btn btn-success">Modifier</button>
       </div>
-      <canvas id="tempsFormation" style="max-width:350px;margin:0 auto;"></canvas>
+      <canvas id="tempsFormation" style="max-width:100%;max-height:300px;margin:0 auto;"></canvas>
       <hr />
     </div>
   </div>
@@ -156,19 +156,93 @@ include STAFFINC_DIR . 'templates/notes.tmpl.php';*/
         }
     });
 
+    var colors = [
+      "#00ffff",
+      "#f0ffff",
+      "#f5f5dc",
+      "#000000",
+      "#0000ff",
+      "#a52a2a",
+      "#00ffff",
+      "#00008b",
+      "#008b8b",
+      "#a9a9a9",
+      "#006400",
+      "#bdb76b",
+      "#8b008b",
+      "#556b2f",
+      "#ff8c00",
+      "#9932cc",
+      "#8b0000",
+      "#e9967a",
+      "#9400d3",
+      "#ff00ff",
+      "#ffd700",
+      "#008000",
+      "#4b0082",
+      "#f0e68c",
+      "#add8e6",
+      "#e0ffff",
+      "#90ee90",
+      "#d3d3d3",
+      "#ffb6c1",
+      "#ffffe0",
+      "#00ff00",
+      "#ff00ff",
+      "#800000",
+      "#000080",
+      "#808000",
+      "#ffa500",
+      "#ffc0cb",
+      "#800080",
+      "#800080",
+      "#ff0000",
+      "#c0c0c0",
+      "#ffffff",
+      "#ffff00"
+  ];
+
+  function hexToRgbA(hex){
+      var c;
+      if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+          c= hex.substring(1).split('');
+          if(c.length== 3){
+              c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+          }
+          c= '0x'+c.join('');
+          return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',0.2)';
+      }
+      throw new Error('Bad Hex');
+  }
+
   var getChartData = function(datas){
       datas = $.parseJSON(datas);
-      return data = {
-          labels: datas.labels,
-          datasets: [
-              {
-                  data: datas.data,
-                  backgroundColor: datas.backgrounds
-              }]
+
+      var datasets = [];
+      //randomColors
+      $.each(datas.data,function(kay,value){
+        var color = colors[Math.floor(Math.random() * colors.length)];
+        datasets.push({
+          label: value.label,
+          fill: true,
+          backgroundColor: hexToRgbA(color),
+          borderColor: color,
+          pointBorderColor: "#fff",
+          pointBackgroundColor: color,
+          data: value.data
+        });
+      });
+
+      var data = {
+        labels: datas.labels,
+        datasets: datasets
       };
+
+      return data;
     }
 
     var options = {
+      maintainAspectRatio: false,
       tooltips: {
         callbacks: {
           label: function(tooltipItem, chartData) {
@@ -205,8 +279,9 @@ include STAFFINC_DIR . 'templates/notes.tmpl.php';*/
         success : function(response){
           if(myChart[type] != undefined)
             myChart[type].destroy();
+
           myChart[type] = new Chart($("#"+canvas), {
-            type: 'pie',
+            type: 'radar',
             data: getChartData(response),
             options : options
           });
