@@ -78,6 +78,7 @@
   <div id="historique" ng-repeat="historique in historiques">
           <div id="titre" ng-class="{ 'dispo': !stock.dispo && historique == historiques[0] , 'nonDispo': stock.dispo}">
               <h4>Historique</h4>
+              <button ng-click="printHistorique(historique)" class="printHistorique btn btn-primary"><span class="glyphicon glyphicon-print"></span></button>
           </div>
           <div id="historique1">
 
@@ -104,4 +105,11 @@
           </div>
 
   </div>
+
 </div>
+
+
+<script src="osTicket/upload/scp/js/docxtemplater.js"></script>
+<script src="osTicket/upload/scp/js/jszip.js"></script>
+<script src="osTicket/upload/scp/js/file-saver.min.js"></script>
+<script src="osTicket/upload/scp/js/jszip-utils.js"></script>

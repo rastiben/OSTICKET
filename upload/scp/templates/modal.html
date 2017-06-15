@@ -127,6 +127,10 @@
                 <button type="button" data-ng-click="callremove({contrat:contrat})" class="btn btn-danger" style="float:left" data-dismiss="modal" ng-if="permissions | havePerms:'contrat.edit'"><span class="glyphicon glyphicon-trash"></span></button>
                 <button type="button" ng-if="permissions | havePerms:'contrat.edit'" class="btn btn-default" data-ng-click="callbackbuttonleft()" data-dismiss="modal">Annuler</button>
                 <button type="button" ng-if="permissions | havePerms:'contrat.edit'" class="btn btn-primary" data-dismiss="modal" data-ng-click="callbackbuttonright({contrat:contrat})">{{validButton}}</button>
+                <label for="upload">
+                  <span class="glyphicon glyphicon-print btn btn-primary"></span>
+                  <input type="file" ng-upload-change="printRapport($event)" id="upload" style="display:none">
+                </label>
 
             </div>
             </form>

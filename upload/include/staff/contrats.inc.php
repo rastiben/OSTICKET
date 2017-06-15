@@ -76,6 +76,11 @@
   <a class="btn btn-primary invoicesBtn" ng-click="printList()" ng-show="doInvoice"><span class="glyphicon glyphicon-print"></span></a>
 </div>
 
+<script src="./js/docxtemplater.js"></script>
+<script src="./js/jszip.js"></script>
+<script src="./js/file-saver.min.js"></script>
+<script src="./js/jszip-utils.js"></script>
+
 <script src="../js/angular-resource.min.js"></script>
 <script src="./js/moment.js"></script>
 <script src="./js/contrats.js"></script>

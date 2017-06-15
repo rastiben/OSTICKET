@@ -115,7 +115,7 @@ class bdd_org{
 
     public function findOneOccur($name){
 
-      $prepare = $this->DB->prepareSAGE("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site
+      $prepare = $this->DB->prepareSAGE("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site,CT_INTITULE
                                       FROM F_COMPTET
                                       WHERE CT_Num = ?
                                       ORDER BY CT_Num");

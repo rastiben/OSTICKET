@@ -19,6 +19,12 @@ h1 {
   margin-right: 15px;
 }
 
+.printHistorique{
+  position: absolute;
+  right: 15px;
+  top: 5px;
+}
+
 #titre_general{
     box-shadow: 0px 3px 20px 0px #656565;
     background-color: #2ECC71;
@@ -64,6 +70,7 @@ h1 {
     background-color: white;
     display: table;
     width: 100%;
+    position: relative;
 }
 
 #historique:last-child{

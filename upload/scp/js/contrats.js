@@ -180,6 +180,23 @@ app.controller('contratCtrl',['$scope','contratFactory','$log','$http',function(
 
 }]);
 
+app.directive("ngUploadChange",function(){
+    return{
+        scope:{
+            ngUploadChange:"&"
+        },
+        link:function($scope, $element, $attrs){
+            $element.on("change",function(event){
+                $scope.ngUploadChange({$event: event})
+                $element.val("");
+            })
+            $scope.$on("$destroy",function(){
+                $element.off();
+            });
+        }
+    }
+});
+
 app.directive('datepicker', function() {
   return {
     require: 'ngModel',
@@ -245,6 +262,61 @@ app.directive('modal',['$http','contratFactory', function ($http,contratFactory)
               if($event.keyCode == 13)
                 if($scope.contrat.prix != undefined)
                   $scope.contrat.prix = (parseFloat($scope.contrat.prix) + ($scope.contrat.prix * ($event.target.value/100))).toFixed(2);
+            }
+            $scope.printRapport = function($event){
+              var files = event.target.files;
+              var file = files[0];
+
+
+                var Uint8ToString = function (u8a){
+                  var CHUNK_SZ = 0x8000;
+                  var c = [];
+                  for (var i=0; i < u8a.length; i+=CHUNK_SZ) {
+                    c.push(String.fromCharCode.apply(null, u8a.subarray(i, i+CHUNK_SZ)));
+                  }
+                  return c.join("");
+                }
+
+                var loadFile = function (callback) {
+                    var reader = new FileReader();
+                    reader.onload = function() {
+
+                      var arrayBuffer = this.result,
+                      array = new Uint8Array(arrayBuffer),
+                      binaryString = Uint8ToString(array);
+
+                      $http.get('ajaxs.php/org/find/'+$scope.contrat.org).then(function(data){
+                        $scope.orgData = angular.fromJson(data.data[0].data);
+                        callback(null,binaryString);
+                      });
+
+                    }
+
+                    reader.readAsArrayBuffer(file)
+                }
+                loadFile(function (err, content) {
+                    if (err) {
+                        throw err
+                    };
+                    var zip = new JSZip(content);
+                    var doc = new Docxtemplater().loadZip(zip)
+
+                    doc.setData({
+                            "CODE": $scope.contrat.code
+                            , "org":  $scope.orgData[7]
+                            , "adresse":  $scope.orgData[1]
+                            , "cp":  $scope.orgData[3]
+                            , "ville":  $scope.orgData[4]
+                            , "date_debut":  $scope.contrat.date_debut
+                            , "date_fin":  $scope.contrat.date_fin
+                            , "date":  moment().format('DD/MM/YYYY')
+                        })
+                    doc.render()
+                    out = doc.getZip().generate({
+                            type: "blob"
+                        })
+                    saveAs(out, "Contrat.docx")
+                });
             }
         },
         link: function(scope, element, attrs){

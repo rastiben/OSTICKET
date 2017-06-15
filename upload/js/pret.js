@@ -227,6 +227,35 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
     };
 
 
+    $scope.printHistorique = function(historique){
+      var loadFile = function (url, callback) {
+            JSZipUtils.getBinaryContent(url, callback);
+        }
+        loadFile("osTicket/upload/assets/doc/pret.docx", function (err, content) {
+            if (err) {
+                throw err
+            };
+            var zip = new JSZip(content);
+            var doc = new Docxtemplater().loadZip(zip)
+            //doc.attachModule(imageModule);
+            doc.setData({
+                    "client": historique.org
+                    , "destinataire": historique.destinataire
+                    , "designation": $scope.stock.designation
+                    , "marque": $scope.stock.marque
+                    , "numeroSerie": $scope.stock.numserie
+                    , "datePret": moment(historique.date).format('DD/MM/YYYY')
+                    , "raison": historique.raison
+                    , "visa": historique.visa
+                }) //set the templateVariables
+            doc.render() //apply them (replace all occurences of {first_name} by Hipp, ...)
+            out = doc.getZip().generate({
+                    type: "blob"
+                }) //Output the document using Data-URI
+            saveAs(out, "Prêt " + $scope.stock.designation + " " + historique.org + ".docx")
+        });
+    }
+
    $scope.origData = angular.copy($scope.stock);
 
     $scope.reset = function () {
