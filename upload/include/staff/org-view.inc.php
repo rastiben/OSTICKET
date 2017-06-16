@@ -22,6 +22,8 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
 
 ?>
 
+<script src="http://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script>
+
 <div class="profile">
   <div class="col-md-3">
     <div class="block">
@@ -87,6 +89,7 @@ $tickets->values('number','created','cdata__subject','topic__couleur','user__org
       <canvas id="tempsFormation" style="max-width:100%;max-height:300px;margin:0 auto;"></canvas>
       <hr />
     </div>
+    <button class="btn btn-primary"><span class="glyphicon glyphicon-print"></span></button>
   </div>
 </div>
 
