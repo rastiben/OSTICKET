@@ -31,13 +31,12 @@ class stock{
     */
     public static function getSN($reference,$agent){
         $bdd_stock = bdd_stock::getInstance();
-        $stock = 'STOCK VOITURE ' . strtoupper($agent);
 
-        $sn = $bdd_stock->getSN($reference,$stock);
+        $sn = $bdd_stock->getSN($reference,$agent);
 
         $serialNumbers = [];
         while($myRow = odbc_fetch_array($sn)){
-            array_push($serialNumbers,$myRow['LS_NOSERIE']);
+            array_push($serialNumbers,$myRow['LS_NoSerie']);
         }
 
         return $serialNumbers;

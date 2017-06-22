@@ -6,12 +6,12 @@ Ajouter un Materiel :
     <span ng-class="{'glyphicon glyphicon-minus' : addForm , 'glyphicon glyphicon-plus' : !addForm}"></span>
 </button>
 
-<!-- Formulaire d'ajout d'un materiel avec comme paramettre : Designation, Categorie_id, Marque, Numserie, Disponibilité -->
+<!-- Formulaire d'ajout d'un materiel avec comme paramettre : Designation, Categorie, Marque, Numserie, Disponibilité -->
     <form method="post" novalidate class="simple-form" ng-show="addForm">
         <fieldset>
             <legend>Info du materiel :</legend>
             <label>Designation : <input type="text" name="designation" ng-model="designation" /></label>
-            <label>categorie_id : <input type="text" name="categorie_id" ng-model="categorie_id" /></label>
+            <label>categorie : <input type="text" name="categorie" ng-model="categorie" /></label>
             <label>Marque : <input type="text" name="marque" ng-model="marque" /></label>
             <label>Num Serie : <input type="text" name="numserie" ng-model="numserie" /></label>
             <label>Disponible : <input type="checkbox" name="dispo" ng-model="dispo" checked="on" class="radio" value=1 ng-init="dispo = true"/></label>
@@ -27,57 +27,38 @@ Ajouter un Materiel :
 <!---------------------------------------------------- ZONE TITRE DU TABLEAU ---------------------------------------------------->
 <thead>
     <tr>
-      <!--  <th>
-        ID
-        <button ng-click="sortBy('id')" class="btn btn-success">
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'id', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'id'}"></i>
-        </button>
-        <span class="sortorder" ng-show="propertyName === 'id'" ng-class="{reverse: reverse}"></span>
-        </th> -->
-
         <th>
-        Designation
-        <button ng-click="sortBy('designation')" class="btn btn-success"> <!-- initialisation d'un bouton bootstrap success (couleur verte) -->
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'designation', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'designation'}"></i>    <!-- permet de trier par ordre alphabetique (A-Z ou Z-A) uniquement designation -->
-        </button>
-        <span class="sortorder" ng-show="propertyName === 'designation'" ng-class="{reverse: reverse}"></span>
-        <!-- le propertyName permet de "reverse" designation (inverse le sens) -->                                                                           </th>
-
+          Designation
+          <span ng-click="sortBy('designation')" class="sortorder" ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'designation', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'designation'}"></span>
+          <input ng-model="designationFilter" />
+        </th>
         <th>
         Categorie
-        <button ng-click="sortBy('categorie_id')" class="btn btn-success">
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'categorie_id', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'categorie_id'}"></i>
-        <span class="sortorder" ng-show="propertyName === 'categorie_id'" ng-class="{reverse: reverse}"></span>
-        </button>
+        <span ng-click="sortBy('categorie')" class="sortorder" ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'categorie', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'categorie'}"></span>
+        <input ng-model="categorieFilter" />
         </th>
 
         <th>
         Marque
-        <button ng-click="sortBy('marque')" class="btn btn-success">
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'marque', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'marque'}"></i>
-        <span class="sortorder"  ng-show="propertyName === 'marque'" ng-class="{reverse: reverse}"></span>
-        </button>
+        <span ng-click="sortBy('marque')" class="sortorder"  ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'marque', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'marque'}"></span>
+        <input ng-model="marqueFilter" />
         </th>
 
         <th>
         Num Serie
-        <button ng-click="sortBy('numserie')" class="btn btn-success">
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'numserie', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'numserie'}"></i>
-        <span class="sortorder" ng-show="propertyName === 'numserie'" ng-class="{reverse: reverse}"></span>
-        </button>
+        <span ng-click="sortBy('numserie')" class="sortorder" ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'numserie', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'numserie'}"></span>
+        <input ng-model="numserieFilter" />
         </th>
 
         <th>
         Disponible
-        <button ng-click="sortBy('dispo')" class="btn btn-success">
-        <i ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'dispo', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'dispo'}"></i>
-        <span class="sortorder" ng-show="propertyName === 'dispo'" ng-class="{reverse: reverse}"></span>
-        </button>
+        <span ng-click="sortBy('dispo')" class="sortorder" ng-class="{'glyphicon glyphicon-sort-by-alphabet' : !reverse  || propertyName != 'dispo', 'glyphicon glyphicon-sort-by-alphabet-alt': reverse  && propertyName == 'dispo'}"></span>
+        <input ng-model="dispoFilter" />
         </th>
 
 
         <th style="color:#d9534f;">
-        Supprimer
+        Suppression
         </th>
 
     </tr>
@@ -86,11 +67,11 @@ Ajouter un Materiel :
 <!---------------------------------------------------- ZONE CONTENU DU TABLEAU ---------------------------------------------------->
 <tbody>
 
-    <tr ng-click="goTo(stock.id)" ng-repeat="stock in stocks | orderBy:propertyName:reverse ">
+    <tr ng-click="goTo(stock.id)" ng-repeat="stock in stocks | orderBy:propertyName:reverse | filter:{ designation: designationFilter,categorie: categorieFilter,marque: marqueFilter,numserie: numserieFilter,dispo:dispoFilter}">
 
 
         <td>{{stock.designation}}</td>
-        <td>{{stock.categorie_id}}</td>
+        <td>{{stock.categorie}}</td>
         <td>{{stock.marque}}</td>
         <td>{{stock.numserie}}</td>
         <td>
@@ -100,7 +81,7 @@ Ajouter un Materiel :
         <!-- Creation d'un modal (page permettant la confirmation/validation ou annulation de suppression d'un materiel) -->
         <td>
         <div>
-            <button href="#{{modal1}}" role="button" class="btn btn-danger" ng-click="modalInfo(stock)" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span></button>
+            <button href="#{{modal1}}" role="button" class="btn btn-danger" ng-click="modalInfo(stock); $event.preventDefault();" data-toggle="modal"><span class="glyphicon glyphicon-trash"></span></button>
             <!-- le modal "s'activera" lorsque l'on cliquera sur le bouton corbeille -->
         </div>
         </td>

@@ -48,7 +48,7 @@ implements TemplateVariable {
           $stock = new Stock();
 
         $stock->designation = $vars['designation'];
-        $stock->categorie_id = $vars['categorie_id'];
+        $stock->categorie = $vars['categorie'];
         $stock->marque = $vars['marque'];
         $stock->numserie = $vars['numserie'];
         $stock->dispo = $vars['dispo'];

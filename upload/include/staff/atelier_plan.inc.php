@@ -68,9 +68,11 @@
                        <div class="col-md-12">
                         <table class="list atelierT" border="0" cellspacing="1" cellpadding="2" width="100%">
                             <thead>
+                                <th></th>
                                 <th>Ticket</th>
                                 <th>Organisation</th>
                                 <th>Type</th>
+                                <th>VD</th>
                                 <th>Etat</th>
                                 <th>Affecter</th>
                                 <th>Supprimer</th>
@@ -339,6 +341,7 @@
         //$(function() {
 
             var planches = new Planche();
+            var previousNode = undefined;
 
             $(document).ajaxStop(function() {
                 $('.balls').css('display','none');
@@ -375,6 +378,7 @@
                     $('#fichesModal').modal({backdrop: 'static', keyboard: false});
 
                     $('.list.atelierT tbody').empty();
+                    previousNode = undefined;
                     $(contenues).each(function(number,obj){
                         addContenuInListe(obj);
                     });
@@ -412,6 +416,7 @@
                 obj = obj[0];
 
                 planches.changeState(obj.getId(), "Entrée");
+                previousNode = undefined;
                 planches.affectContenu(obj.getId(),null,function(){
                     addContenuInListe(obj);
                     contenu.remove();
@@ -772,6 +777,7 @@
                 //SWITCH CONTENT
                 if(state != "Planche"){
                     var contenu = planches.getContenu(id)[0];
+                    previousNode = undefined;
                     planches.affectContenu(id,null,function(){
                         $('#'+id+'.contenu').remove();
                         addContenuInListe(contenu);
@@ -831,9 +837,38 @@
             }
 
             var addContenuInListe = function(obj){
-                $('.list.atelierT tbody').append('<tr><td>'+obj.number+'</td><td>'+obj.org_name+'</td><td>'+obj.getType()+'</td><td>'+obj.getEtat()+'</td><td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td><td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>');
+
+                var chevron = obj.getType() == "prepa" ? '<span class="glyphicon glyphicon-chevron-down chevron"></span>' : '';
+                var actions = obj.getType() == "repa" ? '<td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
+                <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>' : '';
+                var colspan = obj.getType() == "prepa" ? 'colspan="3"' : '';
+
+                if(previousNode == undefined || obj.number != previousNode.number)
+                  $('.list.atelierT tbody').append('<tr class="parent"><td>'+chevron+'</td> \
+                              <td>'+obj.number+'</td><td>'+obj.org_name+'</td><td colspan="2">'+obj.getType()+'</td> \
+                              <td '+colspan+'>'+obj.getEtat()+'</td>'+actions+'</tr>');
+                else{
+                  $('.list.atelierT tbody').append('<tr class="child"><td colspan="4"></td> \
+                              <td>VD'+obj.contenu.VD.getId()+'</td><td>'+obj.getEtat()+'</td><td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
+                              <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>');
+                }
+
+
+                previousNode = obj;
             }
 
+
+            $(document).on("click",'.list.atelierT .parent .chevron',function(){
+              var self = $(this);
+              if(self.hasClass('glyphicon-chevron-down')){
+                self.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+                self.closest('tr').nextUntil('.parent').css('display','table-row');
+              } else {
+                self.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+                self.closest('tr').nextUntil('.parent').css('display','none');
+              }
+
+            });
 
         //});
 

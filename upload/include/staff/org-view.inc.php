@@ -6,14 +6,15 @@ require_once(SCP_DIR.'Request/Tickets.php');
 
 if(!defined('OSTSCPINC') || !$thisstaff || !isset($_REQUEST['id'])) die('Invalid path');
 
-//$orgsC = OrganisationCollection::getInstance();
+$name = $_GET['id'];
+$orgsC = OrganisationCollection::getInstance();
+$org = $orgsC->findOneOccur($name)[0];
 
-//$org = $orgsC->findOneOccur($name)[0];
 //var_dump($org);
 //die();
 
-if(empty($org))
-  $org = new Organisation(["411VDOC","150 RUE DES HAUTS DE LA CHAUME","","86280","SAINT BENOIT","",""]);
+/*if(empty($org))
+  $org = new Organisation(["411VDOC","150 RUE DES HAUTS DE LA CHAUME","","86280","SAINT BENOIT","",""]);*/
 
 $apiKey = "AIzaSyB4pINEbEV_CczgRAhMhIza1OAEzSJV6JA";
 

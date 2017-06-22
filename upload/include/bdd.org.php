@@ -66,7 +66,7 @@ class bdd_org{
 
             $request = $this->DB->selectBetween("F_COMPTET",$fields,$whereClauses,$orderBy,$range);
 
-            $prepare = $this->DB->prepareSAGE($request);
+            $prepare = $this->DB->prepare($request);
             $values = array();
             $this->DB->execute($prepare,$values);
             return $prepare;
@@ -78,7 +78,7 @@ class bdd_org{
     */
     public function getOrgWithId($id){
         /*Préparation et execution de celle ci.*/
-        $prepare = $this->DB->prepareSAGE("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site
+        $prepare = $this->DB->prepare("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site
                                         FROM F_COMPTET
                                         WHERE cbMarq LIKE ?
                                         ORDER BY CT_Num");
@@ -103,7 +103,7 @@ class bdd_org{
 
         if(substr( $name, 0, 3 ) === "411") $name = substr( $name, 3);
 
-        $prepare = $this->DB->prepareSAGE("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site
+        $prepare = $this->DB->prepare("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site
                                         FROM F_COMPTET
                                         WHERE CT_Num LIKE ?
                                         ORDER BY CT_Num");
@@ -115,7 +115,7 @@ class bdd_org{
 
     public function findOneOccur($name){
 
-      $prepare = $this->DB->prepareSAGE("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site,CT_INTITULE
+      $prepare = $this->DB->prepare("SELECT CT_Num,CT_Adresse,CT_Complement,CT_CodePostal,CT_Ville,CT_Telephone,CT_Site,CT_INTITULE
                                       FROM F_COMPTET
                                       WHERE CT_Num = ?
                                       ORDER BY CT_Num");
@@ -130,7 +130,7 @@ class bdd_org{
     */
     public function nbOrg($search){
         /*Préparation et execution de celle ci.*/
-        $prepare = $this->DB->prepareSAGE("SELECT COUNT(*) FROM F_COMPTET WHERE CT_Num LIKE ?");
+        $prepare = $this->DB->prepare("SELECT COUNT(*) FROM F_COMPTET WHERE CT_Num LIKE ?");
         $values = array("411".$search."%");
         $this->DB->execute($prepare,$values);
         return $prepare;

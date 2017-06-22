@@ -15,7 +15,10 @@ class docSage{
 
         //Récupération du lieu de livraison
         $LI_NO = $BDD->getLi_NO($org);
-        $LI_NO = odbc_fetch_array($LI_NO)['LI_NO'];
+        $LI_NO = odbc_fetch_array($LI_NO)['LI_No'];
+
+        /*echo $LI_NO;
+        die();*/
 
         //Création de l'entete
         do{
@@ -49,7 +52,7 @@ class docSage{
 
       $contrat = $contrats[0];
       //Création de la boucle pour chaque contrat
-      //foreach($contrats as $contrat){
+      foreach($contrats as $contrat){
         //Initialisation des données supplémentaire
         //Calcule de la date précédente
         switch($contrat->periodicite){
@@ -105,7 +108,7 @@ class docSage{
 
         //Récupération du lieu de livraison
         $LI_NO = $BDD->getLi_NO($contrat->org);
-        $LI_NO = odbc_fetch_array($LI_NO)['LI_NO'];
+        $LI_NO = odbc_fetch_array($LI_NO)['LI_No'];
 
         //Création de l'entete
         do{
@@ -148,20 +151,20 @@ class docSage{
 
         //sleep(5);
 
-        //}
+        }
     }
 
     private static function getDoPiece($BDD){
         //Récupération du nouveau BL
         $DO_PIECE = $BDD->getNewNumBL();
-        $DO_PIECE = odbc_fetch_array($DO_PIECE)['DC_PIECE'];
+        $DO_PIECE = odbc_fetch_array($DO_PIECE)['DC_Piece'];
         return $DO_PIECE;
     }
 
     private static function getDoPieceFA4($BDD){
         //Récupération du nouveau numero de facture
         $DO_PIECE = $BDD->getNewNumFA4();
-        $DO_PIECE = odbc_fetch_array($DO_PIECE)['DC_PIECE'];
+        $DO_PIECE = odbc_fetch_array($DO_PIECE)['DC_Piece'];
         return $DO_PIECE;
     }
 

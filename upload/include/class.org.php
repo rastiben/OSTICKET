@@ -153,6 +153,7 @@ class OrganisationCollection{
         $result = $this->bdd_org->getOrgWithName($query);
 
         while($myRow = odbc_fetch_array($result)){
+          
             $this->addOrg($myRow);
         }
 

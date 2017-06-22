@@ -163,7 +163,7 @@ if(strstr($url['path'],"org")){
         echo json_encode($stocks);
     }else if($url['path'] == 'stockSN'){
         $reference = $url['parameters']['reference'];
-        $agent = $url['parameters']['agent'];
+        $agent = urldecode($url['parameters']['agent']);
         $stock = stock::getSN($reference,$agent);
         echo json_encode($stock);
     }else if(isset($url['parameters']['agent'])){

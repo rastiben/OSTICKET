@@ -299,7 +299,7 @@ app.controller("rapportCtrl",["$scope","rapportFactory","stockFactory","$rootSco
 
         stockFactory.query(stock).then(function(data){
             $scope.stock = data.data;
-            $rootScope.$broadcast('STOCK', $scope.stock);
+            $rootScope.$broadcast('STOCK', {stocks:$scope.stock,stock:stock});
             $('.balls').css('display','none');
             $('.stock').css('display','block');
 
@@ -419,7 +419,8 @@ app.filter('pastTimes', function() {
 
 app.controller("stockCtrl",["$scope","stockFactory","$rootScope","$compile", function($scope,stockFactory,$rootScope,$compile){
     $scope.$on('STOCK', function(response,stock) {
-        $scope.stock = stock;
+        $scope.stock = stock.stocks;
+        $scope.staffStock = stock.stock;
         $scope.stockOut = JSON.parse(JSON.stringify($scope.stock));
         $scope.displayStock = JSON.parse(JSON.stringify($scope.stock));
         $.each($scope.stockOut,function(key,value){
@@ -441,7 +442,7 @@ app.controller("stockCtrl",["$scope","stockFactory","$rootScope","$compile", fun
                     var tr = $(button).closest('tr');
                     tr.children().hide();
                     tr.append('<td colspan="3"><div class="loadingSN"><div class="ball"></div><div class="ball1"></div></div></td>');
-                    stockFactory.getSN(reference,'NICOLAS').then(function(SN){
+                    stockFactory.getSN(reference,$scope.staffStock).then(function(SN){
                         //Trier les sn par rapport a ceux deja selectionner
                         var serialNumbers = SN.data.filter(function(e) { return obj.sn.indexOf(e) == -1; });
 

@@ -7,17 +7,18 @@ angular.module('myApp').requires.push('ngResource');
 
 app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { // ROUTE PROVIDER (Configuration des adressses)
     $routeProvider
-    .when('/osTicket/upload/scp/pret.php', {
-        templateUrl: '/osTicket/upload/scp/view/stocks.html', // ADRESSE LISTE
+    .when('/osticket/upload/scp/pret.php', {
+        templateUrl: '/osticket/upload/scp/view/stocks.html', // ADRESSE LISTE
         controller: 'stocksController'
     })
-    .when('/osTicket/upload/scp/pret.php/:id', {
-        templateUrl: '/osTicket/upload/scp/view/stock.html', // ADRESSE HISTORIQUE
+    .when('/osticket/upload/scp/pret.php/:id', {
+        templateUrl: '/osticket/upload/scp/view/stock.html', // ADRESSE HISTORIQUE
         controller: 'stockController'
     })
     .otherwise({
         controller : function(){
-          //console.log(window.location.href);
+          console.log(window.location.href);
+
             window.location.replace(window.location.href);
         },
         template : "<div></div>"
@@ -32,18 +33,18 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
 
 .factory('stocksFactory',['$resource', function($resource){ //MODULE
 
-    return $resource('/osTicket/upload/scp/ajax.php/stocks/:id', {id:'@id'}
+    return $resource('/osticket/upload/scp/ajax.php/stocks/:id', {id:'@id'}
         , {
             historiques:{
                 method: 'GET' // Initialisation de la method PUT pour Mettre à jour les informations du materiel
                 , params: {id:'@id'} // Parametre id pour le lien si dessous
-                , url: '/osTicket/upload/scp/ajax.php/stocks/:id/historiques' // Lien de la page ou doit agir la methode PUT
+                , url: '/osticket/upload/scp/ajax.php/stocks/:id/historiques' // Lien de la page ou doit agir la methode PUT
                 , isArray: true
             },
             addHistorique:{
                 method: 'POST' // Initialisation de la method PUT pour Mettre à jour les informations du materiel
                 , params: {id:'@id'}
-                , url: '/osTicket/upload/scp/ajax.php/stocks/:id/historiques' // Lien de la page ou doit agir la methode PUT
+                , url: '/osticket/upload/scp/ajax.php/stocks/:id/historiques' // Lien de la page ou doit agir la methode PUT
             }
         }
     )
@@ -56,9 +57,9 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
     $scope.stocks = stocksFactory.query();
 
     $scope.currentStock = undefined;
-
     $scope.propertyName = "dispo";  // LE PROPERTY NAME EST DESIGNATION
     $scope.reverse  = true;              // IL EST DE BASE FAUX
+    $scope.modalOpen = false;
 
     $scope.delete = function(stock){
         stocksFactory.delete({id:stock.id},function(){
@@ -79,7 +80,7 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
    $scope.addLine = function(index) {
       var stock = new stocksFactory();
       stock.designation = $scope.designation;
-      stock.categorie_id = $scope.categorie_id;
+      stock.categorie = $scope.categorie;
       stock.marque = $scope.marque;
       stock.numserie = $scope.numserie;
       stock.dispo = $scope.dispo;
@@ -97,10 +98,14 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
 
     $scope.modalInfo = function(stock){
       $scope.currentStock = stock;
+      $scope.modalOpen = true;
     }
 
     $scope.goTo = function(id){
-      $location.path("/osTicket/upload/scp/pret.php/"+id);
+      if(!$scope.modalOpen)
+        $location.path("/osticket/upload/scp/pret.php/"+id);
+
+      $scope.modalOpen = false;
     }
 
 }])
@@ -121,11 +126,16 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
         templateUrl: 'osTicket/upload/scp/view/modal.html',         // Lien du Modal
         controller: function ($scope) {
             $scope.handler = 'pop';
+            $scope.remove = function(){
+              $scope.callbackbuttonright();
+              $(".modal-backdrop").hide();
+            }
         },
         link(scope,element,attrs){                              // Supression forcé du Background
-            $(element).on('hidden.bs.modal', function () {
-                $('.modal-backdrop.fade.in').remove();
-            });
+            scope.element = element;
+                //element.html('');
+                //$('.modal-backdrop.fade.in').remove();
+
         }
     };
 })
@@ -169,7 +179,7 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
       $scope.info.push({
             id:$scope.id,
             designation:$scope.designation,
-            categorie_id:$scope.categorie_id,
+            categorie:$scope.categorie,
             marque:$scope.marque,
             numserie:$scope.numserie,
       });

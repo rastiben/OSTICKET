@@ -51,6 +51,16 @@ h1 {
     margin-bottom: 20px;
 }*/
 
+#info{
+  position: relative;
+}
+
+#info .disponibilite{
+  position: absolute;
+  top: 0px;
+  right: 15px;
+}
+
 #titre{
   text-align: center;
   padding: 2px;
@@ -106,6 +116,14 @@ h1 {
 
 .historiques{
   padding: 0px;
+}
+
+.historiques p{
+  margin-left: 30px;
+}
+
+p{
+  margin-left:0px;
 }
 
 #buttonHisto{

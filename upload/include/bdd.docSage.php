@@ -18,7 +18,7 @@ class bdd_docSage{
     *Constructeur
     */
     private function __construct(){
-        $this->DB = BDD::getInstance(true);
+        $this->DB = BDD::getInstance();
     }
 
     /*

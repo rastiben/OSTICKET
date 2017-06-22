@@ -275,6 +275,10 @@ function VD(id,client,type,numeroSerie,versionWindows,numLicenceW,versionOffice,
     self.mail = mail;
     self.mdp = mdp;
 
+    self.getId = function () {
+        return self.id;
+    }
+
 }
 
 class AtelierAjax{

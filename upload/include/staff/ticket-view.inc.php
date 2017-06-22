@@ -8,7 +8,7 @@ if(!@$thisstaff->isStaff() || !$ticket->checkStaffPerm($thisstaff)) die('Access 
 //Re-use the post info on error...savekeyboards.org (Why keyboard? -> some people care about objects than users!!)
 $info=($_POST && $errors)?Format::input($_POST):array();
 
-require_once(SCP_DIR . 'Request/Tickets.php');
+/*require_once(SCP_DIR . 'Request/Tickets.php');*/
 require_once(SCP_DIR . 'Request/Rapport.php');
 require_once(SCP_DIR . 'Request/Atelier.php');
 require_once(INCLUDE_DIR . 'class.contrats.php');
@@ -1116,7 +1116,7 @@ if ($errors['err'] && isset($_POST['a'])) {
         <tbody>
             <tr ng-repeat="article in displayStock">
                 <td>{{article.reference}}</td>
-                <td style="text-align:center">{{article.quantite}}</td>
+                <td style="text-align:center">{{article.quantite | number : 0}}</td>
                 <td>
                     <div class="row">
                         <div class="">
