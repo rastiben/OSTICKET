@@ -57,9 +57,9 @@ class stats{
         if($memeMoisAnnee){
             $result[1][0] = $begin->format('d') . '-' . $mois[$begin->format('m')] . ' au ' . $end->format('d') . '-' . $mois[$end->format('m')] . ' ' . $begin->format('Y');
             //Premier requete
-            $result[2][0] = $this->getTicketOpenFromOrg($org,$begin->format('Y-m-d'),$end->format('Y-m-d'));
+            $result[2][0] = $this->getTicketOpenFromOrg($org,$begin->format('d-m-Y'),$end->format('d-m-Y'));
             //Deuxieme Requete
-            $result[3][0] = $this->getTicketClosedFromOrg($org,$begin->format('Y-m-d'),$end->format('Y-m-d'));
+            $result[3][0] = $this->getTicketClosedFromOrg($org,$begin->format('d-m-Y'),$end->format('d-m-Y'));
         }
         else{
             $i = 0;
@@ -69,8 +69,8 @@ class stats{
                 if($i > 0)
                     $result[1][$i] = $mois[$begin->format('m')];
                 //Si l'année est différente
-                $start = $begin->format('Y-m-d');
-                $finish = $begin->modify('last day of this month')->format('Y-m-d');
+                $start = $begin->format('d-m-Y');
+                $finish = $begin->modify('last day of this month')->format('d-m-Y');
                 if(($begin->format('Y') !== $end->format('Y'))){
                     //Premier requete
                     $result[2][$i] = $this->getTicketOpenFromOrg($org,$start,$finish);
@@ -95,9 +95,9 @@ class stats{
             //array_pop($result[1]);
             $result[1][$i] = $end->format('d') . '-' . $mois[$end->format('m')] . '-' . $end->format('Y');
             //Premier requete
-            $result[2][$i] = $this->getTicketOpenFromOrg($org,$end->format('Y-m-01'),$end->format('Y-m-d'));
+            $result[2][$i] = $this->getTicketOpenFromOrg($org,$end->format('Y-m-01'),$end->format('d-m-Y'));
             //Deuxieme Requete
-            $result[3][$i] = $this->getTicketClosedFromOrg($org,$end->format('Y-m-01'),$end->format('Y-m-d'));
+            $result[3][$i] = $this->getTicketClosedFromOrg($org,$end->format('Y-m-01'),$end->format('d-m-Y'));
         }
 
         //echo print_r($result);
@@ -134,7 +134,7 @@ class stats{
         if($memeMoisAnnee){
             $result[1][0] = $begin->format('d') . '-' . $mois[$begin->format('m')] . ' au ' . $end->format('d') . '-' . $mois[$end->format('m')] . ' ' . $begin->format('Y');
             //Premier requete
-            $result[2][0] = $this->getTicketClosedForAgent($agent,$begin->format('Y-m-d'),$end->format('Y-m-d'));
+            $result[2][0] = $this->getTicketClosedForAgent($agent,$begin->format('d-m-Y'),$end->format('d-m-Y'));
         }
         else{
             $i = 0;
@@ -144,8 +144,8 @@ class stats{
                 if($i > 0)
                     $result[1][$i] = $mois[$begin->format('m')];
                 //Si l'année est différente
-                $start = $begin->format('Y-m-d');
-                $finish = $begin->modify('last day of this month')->format('Y-m-d');
+                $start = $begin->format('d-m-Y');
+                $finish = $begin->modify('last day of this month')->format('d-m-Y');
                 if(($begin->format('Y') !== $end->format('Y'))){
                     //Premier requete
                     $result[2][$i] = $this->getTicketClosedForAgent($agent,$start,$finish);
@@ -165,7 +165,7 @@ class stats{
             }
             $result[1][$i] = $end->format('d') . '-' . $mois[$end->format('m')] . '-' . $end->format('Y');
             //Premier requete
-            $result[2][$i] = $this->getTicketClosedForAgent($agent,$end->format('Y-m-01'),$end->format('Y-m-d'));
+            $result[2][$i] = $this->getTicketClosedForAgent($agent,$end->format('Y-m-01'),$end->format('d-m-Y'));
         }
 
         //echo print_r($result);

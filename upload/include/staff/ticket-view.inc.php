@@ -532,6 +532,7 @@ if($ticket->isOverdue())
             <select name="selectContrat" id="selectContrat">
               <?php
                 $contrats = ContratModel::objects()->filter(array('org'=>'411ADSEA')); //$orgName
+                //TODO : change 411ADSEA TO $orgname
                 foreach($contrats as $contrat){
               ?>
                 <option><?= $contrat->ht['type']; ?></option>
@@ -1648,7 +1649,7 @@ $(function() {
 
         var timeout;
         $(window).scroll(function() {
-            clearTimeout(timeout);
+            //clearTimeout(timeout);
             timeout = setTimeout(function() {
                 if($('.fixed-right').css('display') != 'none' && $(document).width() > 974){
                 $('.ticket_right').height($('.ticket_left').height());
@@ -1662,13 +1663,13 @@ $(function() {
                     $('.fixed-right').css('top','135px');
                     $('.fixed-right').css('width','100%');
                     $('.fixed-right').css('height','auto');
-                } else */if($(document).scrollTop() > 208){
+                } else */if($(document).scrollTop() > 208 ){
                     $('.fixed-right').css('position','fixed');
                     $('.fixed-right').css('top','135px');
                     $('.fixed-right').css('bottom','30px');
                     $('.fixed-right').css('width','20%');
                     $('.fixed-right').css('height','auto');
-                } else {
+                } else if($('.fixed-right').css('position') != "relative"){
                     $('.fixed-right').css('position','relative');
                     $('.fixed-right').css('top','initial');
                     $('.fixed-right').css('bottom','initial');
@@ -1676,7 +1677,7 @@ $(function() {
                     $('.fixed-right').css('height','auto');
                 }
             }
-            }, 10);
+          }, 10);
         });
 
         //$(".fixed-right").stick_in_parent();

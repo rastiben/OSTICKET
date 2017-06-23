@@ -439,10 +439,10 @@ var scp_prep = function() {
          if (!visible) {
            visible = true;
            setTimeout(function() {
-             $that.addClass('fixed').css('top', '-'+$that.height()+'px')
-                .animate({top:76}, {easing: 'swing', duration:'fast'});
-             placeholder.height($that.height());
-             $that.find('[data-dropdown]').dropdown('hide');
+              $that.addClass('fixed').css('top', '-'+$that.height()+'px')
+              .animate({top:76}, {easing: 'swing', duration:'fast'});
+              placeholder.height($that.height());
+              $that.find('[data-dropdown]').dropdown('hide');
            }, 1);
          }
        } else {

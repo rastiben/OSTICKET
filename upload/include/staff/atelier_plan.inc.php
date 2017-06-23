@@ -838,19 +838,33 @@
 
             var addContenuInListe = function(obj){
 
+                var pass = true;
+
                 var chevron = obj.getType() == "prepa" ? '<span class="glyphicon glyphicon-chevron-down chevron"></span>' : '';
                 var actions = obj.getType() == "repa" ? '<td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
                 <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>' : '';
                 var colspan = obj.getType() == "prepa" ? 'colspan="3"' : '';
 
-                if(previousNode == undefined || obj.number != previousNode.number)
-                  $('.list.atelierT tbody').append('<tr class="parent"><td>'+chevron+'</td> \
-                              <td>'+obj.number+'</td><td>'+obj.org_name+'</td><td colspan="2">'+obj.getType()+'</td> \
-                              <td '+colspan+'>'+obj.getEtat()+'</td>'+actions+'</tr>');
-                else{
-                  $('.list.atelierT tbody').append('<tr class="child"><td colspan="4"></td> \
+                if(previousNode == undefined && obj.getType() == "prepa"){
+                  if($('.list.atelierT tbody .parent#'+obj.number).length > 0){
+                    $('<tr class="child"><td colspan="4"></td> \
                               <td>VD'+obj.contenu.VD.getId()+'</td><td>'+obj.getEtat()+'</td><td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
-                              <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>');
+                              <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>')
+                              .insertAfter('.list.atelierT tbody .parent#'+obj.number);
+                    pass = false;
+                  }
+                }
+
+                if(pass){
+                  if(previousNode == undefined || obj.number != previousNode.number){
+                    $('.list.atelierT tbody').append('<tr id="'+obj.number+'" class="parent"><td>'+chevron+'</td> \
+                                <td>'+obj.number+'</td><td>'+obj.org_name+'</td><td colspan="2">'+obj.getType()+'</td> \
+                                <td '+colspan+'>'+obj.getEtat()+'</td>'+actions+'</tr>');
+                  } else {
+                    $('.list.atelierT tbody').append('<tr class="child"><td colspan="4"></td> \
+                                <td>VD'+obj.contenu.VD.getId()+'</td><td>'+obj.getEtat()+'</td><td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
+                                <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>');
+                  }
                 }
 
 
