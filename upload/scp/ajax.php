@@ -156,6 +156,9 @@ $dispatcher = patterns('',
         url_post('$','add'),
         url_get('$','index')
     )),
+    url('^/vd', patterns('ajax.vd.php:VDAjaxAPI',
+        url_get('$','index')
+    )),
     url('^/tickets/', patterns('ajax.tickets.php:TicketsAjaxAPI',
         url_get('^(?P<tid>\d+)/change-user$', 'changeUserForm'),
         url_post('^(?P<tid>\d+)/change-user$', 'changeUser'),

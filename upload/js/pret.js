@@ -53,8 +53,9 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
 
 
 //CONTROLLEUR QUI PERMET DANS TRIER DE A a Z (PARTIE STOCKS)
-.controller('stocksController',['$scope','stocksFactory', '$log','$location', 'orderByFilter', function($scope, stocksFactory, $log, $location, orderBy ){
+.controller('stocksController',['$scope','stocksFactory', '$log','$location', 'orderByFilter', '$timeout', function($scope, stocksFactory, $log, $location, orderBy, $timeout){
     $scope.stocks = stocksFactory.query();
+    $scope.err = undefined;
 
     $scope.currentStock = undefined;
     $scope.propertyName = "dispo";  // LE PROPERTY NAME EST DESIGNATION
@@ -85,8 +86,10 @@ app.config(function($routeProvider, $locationProvider, $mdDateLocaleProvider) { 
       stock.numserie = $scope.numserie;
       stock.dispo = $scope.dispo;
       stock.$save(function(){
-          $scope.stocks.push(stock);
-
+        $scope.stocks.push(stock);
+        $scope.err = undefined;
+      },function(err){
+        $scope.err = err.data;
       });
     }
 

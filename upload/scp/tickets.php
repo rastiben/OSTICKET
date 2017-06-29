@@ -120,10 +120,12 @@ if($_POST && !$errors):
                     $errors['err']=__('Email is in banlist. Must be removed to reply.');
             }
 
-            $numserie = explode(' - ',$_POST['pret'])[1];
-            $stock = StockModel::objects()->filter(array('numserie'=>$numserie))[0];
-            if(!($stock->dispo != 0 && $stock->thread_entry_id == null))
-              $errors['err'] = __('Ce matériel est déja en prêt.');
+            if(isset($_POST['pret']) && $_POST['pret'] != "Vueillez choisir un pret"){
+              $numserie = explode(' - ',$_POST['pret'])[1];
+              $stock = StockModel::objects()->filter(array('numserie'=>$numserie))[0];
+              if(!($stock->dispo != 0 && $stock->thread_entry_id == null))
+                $errors['err'] = __('Ce matériel est déja en prêt.');
+            }
 
             if(!$errors && ($response=$ticket->postReply($vars, $errors, $_POST['emailreply']))) {
                 $msg = sprintf(__('%s: Reply posted successfully'),
@@ -137,7 +139,7 @@ if($_POST && !$errors):
                     $stock->setThreadEntry($response->ht['id']);
                     $stock->setDispo(0);
 
-                    preg_match_all('/(?<=\s|^)[a-z]/i', $ticket->getStaff()->getName(), $matches);
+                    preg_match_all('/(?<=\s|^)[a-z]/i', $thisstaff->getName(), $matches);
 
                     $historique = Historique::fromVars(array(
                       "stock_id"=>$stock->ht['id'],

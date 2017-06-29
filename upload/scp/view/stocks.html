@@ -1,5 +1,8 @@
 <!doctype html>
 
+<div ng-class="{'err active':err,'err':!err}">
+  <p>{{err}}</p>
+</div>
 <!-- Initialisation d'un bouton permettant l'ajout d'un materiel via un formulaire -->
 Ajouter un Materiel :
 <button class="btn-warning" ng-click="displayForm()">

@@ -9,7 +9,7 @@ class docSage{
         return $BDD;
     }
 
-    public static function createDocument($org,$stock,$lines){
+    public static function createDocument($org,$stock,$lines,$typeSortie){
         //Pour chaque ligne
         $BDD = self::getBDD();
 
@@ -17,13 +17,22 @@ class docSage{
         $LI_NO = $BDD->getLi_NO($org);
         $LI_NO = odbc_fetch_array($LI_NO)['LI_No'];
 
-        /*echo $LI_NO;
-        die();*/
+        switch($typeSortie){
+          case "F":
+            $typeSortie = "Facturable";
+            break;
+          case "O" :
+            $typeSortie = "Offert";
+            break;
+          case "P":
+            $typeSortie = "Prêt";
+            break;
+        }
 
         //Création de l'entete
         do{
             $DO_PIECE = self::getDoPiece($BDD);
-            $ENTETE = $BDD->createDocEntete($org,$stock,$LI_NO,$DO_PIECE);
+            $ENTETE = $BDD->createDocEntete($org,$stock,$LI_NO,$DO_PIECE,$typeSortie);
         } while ($ENTETE === false);
 
         $lines = json_decode($lines);

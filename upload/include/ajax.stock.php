@@ -30,8 +30,12 @@ class StocksAjaxAPI extends AjaxController {
   function add(){
     $vars = (array)json_decode(file_get_contents("php://input"));
 
-    if (($stock = Stock::fromVars($vars)))
-        Http::response(201, json_encode($stock->ht));
+    if(StockModel::objects()->filter(array('numserie'=>$vars['numserie']))->count() == 0){
+      if(($stock = Stock::fromVars($vars)))
+          Http::response(201, json_encode($stock->ht));
+    } else {
+      Http::response(400, "Ce numéro de série existe déjà");
+    }
   }
 
   function addHistorique(){

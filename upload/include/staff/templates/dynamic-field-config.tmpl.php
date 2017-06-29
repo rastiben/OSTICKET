@@ -8,7 +8,7 @@
     <li><a href="#visibility"><i class="icon-beaker"></i> <?php echo __('Settings'); ?></a></li>
 </ul>
 
-<div class="hidden tab_content" id="visibility">
+<div class="tab_content" id="visibility" style="display:none">
     <div>
     <div class="span4">
         <div style="margin-bottom:5px"><strong><?php echo __('Enabled'); ?></strong>

@@ -1064,7 +1064,7 @@ $(document).on('pjax:complete', function() {
 });
 
 // Enable PJAX for the staff interface
-if ($.support.pjax) {
+/*if ($.support.pjax) {
   $(document).on('click', 'a', function(event) {
     var $this = $(this);
     if (!$this.hasClass('no-pjax')
@@ -1072,7 +1072,7 @@ if ($.support.pjax) {
         && $this.attr('href').charAt(0) != '#')
       $.pjax.click(event, {container: $this.data('pjaxContainer') || $('#pjax-container'), timeout: 2000});
   })
-}
+}*/
 
 $(document).on('click', '.link:not(a):not(.button)', function(event) {
   var $e = $(event.currentTarget);

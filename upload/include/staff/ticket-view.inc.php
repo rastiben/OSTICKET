@@ -13,6 +13,7 @@ require_once(SCP_DIR . 'Request/Rapport.php');
 require_once(SCP_DIR . 'Request/Atelier.php');
 require_once(INCLUDE_DIR . 'class.contrats.php');
 require_once(INCLUDE_DIR . 'class.stocks.php');
+require_once(INCLUDE_DIR . 'class.rapport.php');
 
 //Get the goodies.
 $dept  = $ticket->getDept();  //Dept
@@ -243,6 +244,11 @@ if($ticket->isOverdue())
 <div class="ticket_left col-md-9">
 
 
+<?php
+
+  $nbRapports = RapportModel::objects()->filter(array('id_ticket'=>$ticket->getId()))->count();
+
+?>
 <ul  class="tabs clean threads" id="ticket_tabs" >
     <li class="active"><a id="ticket-thread-tab" href="#ticket_thread"><?php
         echo sprintf(__('Ticket Thread (%d)'), $tcount); ?></a></li>
@@ -253,7 +259,7 @@ if($ticket->isOverdue())
         if ($ticket->getNumTasks())
             echo sprintf('&nbsp;(<span id="ticket-tasks-count">%d</span>)', $ticket->getNumTasks());
         ?></a></li>
-    <li><a id="ticket-rapport-tab" href="#ticket_rapport">Rapports</a></li>
+    <li><a id="ticket-rapport-tab" href="#ticket_rapport">Rapports (<?= $nbRapports; ?>)</a></li>
     <li><a id="atelier-tab" href="#atelier">Atelier</a></li>
 </ul>
 
@@ -1107,7 +1113,15 @@ if ($errors['err'] && isset($_POST['a'])) {
 </div>
 
 <div class="stock" ng-controller="stockCtrl" style="display:none">
-    {{rapports}}
+    <!--{{rapports}}-->
+    <div class="form-group text-center">
+      <label>Type de sortie : </label>
+      <select ng-model="typeSortie">
+        <option value="F" selected="selected">Facturable</option>
+        <option value="O">Offert</option>
+        <option value="P">Prêt</option>
+      </select>
+    </div>
     <table style="margin: 0 auto;">
         <thead>
             <th>Référence</th>
@@ -1193,6 +1207,7 @@ if ($errors['err'] && isset($_POST['a'])) {
         <?php } else { ?>
             <img width="20" src="../assets/default/images/company.png">
             <input class="user_org" type="text">
+            <p>( <?= $ticket->getUser()->getInfoOrg() ?> )</p>
         <?php } ?>
     </div>
     <div class="mail icon org" id="<?php echo $ticket->getOwner()->getOrgId(); ?>">

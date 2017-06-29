@@ -66,10 +66,11 @@ class bdd_docSage{
     }
 
     /*Entete*/
-    public function createDocEntete($TIERS,$DE_NO,$LI_NO,$DO_PIECE){
+    public function createDocEntete($TIERS,$DE_NO,$LI_NO,$DO_PIECE,$typeSortie){
         $DATE = date('\{\d Y-m-d\}');
+        $reference = substr('SV '.$typeSortie,0,16);
         //$DATE = date('d-m-Y');
-        $prepare = $this->DB->prepare("INSERT INTO F_DOCENTETE (CG_NUM,CT_NUMPAYEUR,DE_NO,DO_BLFACT,DO_CONDITION,DO_DOMAINE,DO_EXPEDIT,DO_NBFACTURE,DO_PERIOD,DO_PIECE,DO_REF,DO_STATUT,DO_TARIF,DO_TIERS,DO_TYPE,DO_TYPECOLIS,LI_NO,N_CATCOMPTA,DO_DATE,DO_SOUCHE) VALUES ('411000',?,?,0,1,0,1,1,1,?,'". utf8_decode('Sortie Véhicule') ."',2,1,?,3,1,?,1,?,1)");
+        $prepare = $this->DB->prepare("INSERT INTO F_DOCENTETE (CG_NUM,CT_NUMPAYEUR,DE_NO,DO_BLFACT,DO_CONDITION,DO_DOMAINE,DO_EXPEDIT,DO_NBFACTURE,DO_PERIOD,DO_PIECE,DO_REF,DO_STATUT,DO_TARIF,DO_TIERS,DO_TYPE,DO_TYPECOLIS,LI_NO,N_CATCOMPTA,DO_DATE,DO_SOUCHE) VALUES ('411000',?,?,0,1,0,1,1,1,?,'". utf8_decode($reference) ."',2,1,?,3,1,?,1,?,1)");
         $values = array($TIERS,$DE_NO,$DO_PIECE,$TIERS,$LI_NO,$DATE);
         $res = $this->DB->execute($prepare,$values);
         return $res;

@@ -91,9 +91,9 @@ class Rapport
         //Ajout des sorties de stock
         $sortieStock = json_decode($sortieStock);
         foreach($sortieStock as $key=>$article){
-            $res = $this->dbh->prepare("INSERT INTO ost_rapport_stock (id_rapport,reference,quantite,prix) VALUES (:id_rapport,:reference,:quantite,:prix)");
+            $res = $this->dbh->prepare("INSERT INTO ost_rapport_stock (id_rapport,reference,quantite,prix,type) VALUES (:id_rapport,:reference,:quantite,:prix,:type)");
 
-            $res->execute(array(':id_rapport'=>$rapportID,':reference'=>$article->reference,':quantite'=>$article->quantite,':prix'=>$article->prix));
+            $res->execute(array(':id_rapport'=>$rapportID,':reference'=>$article->reference,':quantite'=>$article->quantite,':prix'=>$article->prix,':type'=>$article->typeSortie));
         }
 
         $res = $this->dbh->prepare("INSERT INTO ost_rapport_horaires (id_rapport,arrive_inter,depart_inter,comment) VALUES (:rapport_id,:arrive_inter,:depart_inter,:comment)");

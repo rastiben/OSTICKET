@@ -138,6 +138,11 @@ class UserModel extends VerySimpleModel {
          return $this->get('org_name');
     }
 
+    function getInfoOrg() {
+         return $this->get('cdata')->ht['infoOrg'];
+    }
+
+
     //FIRSTNAME
     /*function getFirstName(){
       return $this->get('cdata_firsname');

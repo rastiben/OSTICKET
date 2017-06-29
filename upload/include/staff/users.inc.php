@@ -188,7 +188,7 @@ else
                     <input type="checkbox" value="<?php echo $U['id']; ?>" class="ckb mass nowarn"/>
                 </td>
                 <td>&nbsp;
-                    <a class="preview"
+                    <a class="preview no-pjax"
                         href="users.php?id=<?php echo $U['id']; ?>#tickets"
                         data-preview="#users/<?php echo $U['id']; ?>/preview"><?php
                         echo Format::htmlchars($name); ?></a>
@@ -314,4 +314,3 @@ $(function() {
     });
 });
 </script>
-

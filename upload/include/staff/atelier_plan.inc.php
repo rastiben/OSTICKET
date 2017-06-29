@@ -860,11 +860,11 @@
                     $('.list.atelierT tbody').append('<tr id="'+obj.number+'" class="parent"><td>'+chevron+'</td> \
                                 <td>'+obj.number+'</td><td>'+obj.org_name+'</td><td colspan="2">'+obj.getType()+'</td> \
                                 <td '+colspan+'>'+obj.getEtat()+'</td>'+actions+'</tr>');
-                  } else {
+                  } /*else {*/
                     $('.list.atelierT tbody').append('<tr class="child"><td colspan="4"></td> \
                                 <td>VD'+obj.contenu.VD.getId()+'</td><td>'+obj.getEtat()+'</td><td><button class="btn btn-success addContenu" id="'+ obj.getId() +'" >Affecter</button></td> \
                                 <td><button class="btn btn-danger removeContenu" id="'+ obj.getId() +'" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td></tr>');
-                  }
+                  //}
                 }
 
 

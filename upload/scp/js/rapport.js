@@ -26,12 +26,13 @@ app.factory('stockFactory',['$http','$rootScope','$httpParamSerializerJQLike',fu
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 });
          },
-         createDocument : function(org,stock,lines){
+         createDocument : function(org,stock,lines,typeSortie){
              return $http({method: 'POST',
                     url: './ajaxs.php/docSage/createDoc',
                     data: {org:org,
                            stock:stock,
-                           lines:lines},
+                           lines:lines,
+                           typeSortie:typeSortie},
                     headers: {'Content-Type': 'application/json'}
                 });
          },
@@ -418,6 +419,9 @@ app.filter('pastTimes', function() {
 });
 
 app.controller("stockCtrl",["$scope","stockFactory","$rootScope","$compile", function($scope,stockFactory,$rootScope,$compile){
+
+    $scope.typeSortie = "F";
+
     $scope.$on('STOCK', function(response,stock) {
         $scope.stock = stock.stocks;
         $scope.staffStock = stock.stock;
@@ -506,10 +510,13 @@ app.controller("stockCtrl",["$scope","stockFactory","$rootScope","$compile", fun
 
     $scope.createDocument = function(org){
         var obj = $scope.stockOut.filter(function(e) { return e.quantite > 0});
+        angular.forEach(obj,function(value,key){
+          value.typeSortie = $scope.typeSortie;
+        });
         //console.log(obj);
 
         $('.balls').css('display','block');
-        stockFactory.createDocument(org,$scope.stock[0].stock,JSON.stringify(obj)).then(function(){
+        stockFactory.createDocument(org,$scope.stock[0].stock,JSON.stringify(obj),$scope.typeSortie).then(function(){
             $('.balls').css('display','none');
             $('.ticket_right').prepend('<div class="order-success svg"> \
               <svg xmlns="http://www.w3.org/2000/svg" width="72px" height="72px"> \

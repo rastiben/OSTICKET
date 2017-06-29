@@ -405,12 +405,12 @@ $tickets->constrain(array('lock' => array(
 ?>
 
 <!-- SEARCH FORM START -->
-<div id='basic_search'>
+<!--<div id='basic_search'>
   <div class="pull-right" style="height:25px">
     <span class="valign-helper"></span>
-    <!--<?php
+    <?php
     require STAFFINC_DIR.'templates/queue-sort.tmpl.php';
-    ?>-->
+    ?>
   </div>
 
    <div id="sb-search" class="sb-search">
@@ -456,7 +456,7 @@ $tickets->constrain(array('lock' => array(
             });
         });
 
-    </script>
+    </script>-->
     <!--<form action="tickets.php" method="get" onsubmit="javascript:
   $.pjax({
     url:$(this).attr('action') + '?' + $(this).serialize(),
@@ -478,7 +478,7 @@ return false;">
         >[<?php echo __('advanced'); ?>]</a>
         <i class="help-tip icon-question-sign" href="#advanced"></i>
     </form>-->
-</div>
+<!--</div>-->
 <!-- SEARCH FORM END -->
 <div class="clear"></div>
 <div style="margin-bottom:20px; padding-top:5px;">

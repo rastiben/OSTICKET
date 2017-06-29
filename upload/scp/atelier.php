@@ -24,13 +24,21 @@ $nav->addSubMenu(array('desc'=>'Plan',
                         'href'=>'atelier.php?tabs=plan',
                         'iconclass'=>'Plan no-pjax'));
 
+$nav->addSubMenu(array('desc'=>'Liste des VD',
+                        'title'=>'Liste des VD',
+                        'href'=>'atelier.php?tabs=vd',
+                        'iconclass'=>'Ticket no-pjax'));
+
 if(isset($_REQUEST['tabs'])){
      if($_REQUEST['tabs'] == 'tickets'){
          $nav->setActiveSubMenu(1);
          $inc = 'atelier_tickets.inc.php';
-     } else {
+     } else if($_REQUEST['tabs'] == 'plan') {
          $nav->setActiveSubMenu(2);
          $inc = 'atelier_plan.inc.php';
+     } else {
+       $nav->setActiveSubMenu(3);
+       $inc = 'atelier_vd.inc.php';
      }
 } else {
     $nav->setActiveSubMenu(1);
@@ -42,4 +50,3 @@ require_once(STAFFINC_DIR.$inc);
 require_once(STAFFINC_DIR.'footer.inc.php');
 
 ?>
-
